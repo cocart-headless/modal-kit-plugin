@@ -63,28 +63,38 @@ export function bindLinks( prefix, formats ) {
 
 	bound = true;
 
-	document.addEventListener( 'click', ( event ) => {
-		if (
-			event.defaultPrevented ||
-			event.button !== 0 ||
-			event.metaKey ||
-			event.ctrlKey ||
-			event.shiftKey ||
-			event.altKey
-		) {
-			return;
-		}
+	// In the capture phase, so a theme's smooth scrolling (which cancels
+	// same-page # links and scrolls to the target) doesn't swallow the click
+	// or move focus to the dialog. The link is meant for the modal, so the
+	// click stops here.
+	document.addEventListener(
+		'click',
+		( event ) => {
+			if (
+				event.button !== 0 ||
+				event.metaKey ||
+				event.ctrlKey ||
+				event.shiftKey ||
+				event.altKey
+			) {
+				return;
+			}
 
-		const link = event.target.closest?.( 'a[href]' );
-		const slug = link ? slugFromUrl( link.href, prefix, formats ) : null;
+			const link = event.target.closest?.( 'a[href]' );
+			const slug = link
+				? slugFromUrl( link.href, prefix, formats )
+				: null;
 
-		if ( ! slug ) {
-			return;
-		}
+			if ( ! slug ) {
+				return;
+			}
 
-		event.preventDefault();
-		openModal( slug, { source: 'link', trigger: link } );
-	} );
+			event.preventDefault();
+			event.stopPropagation();
+			openModal( slug, { source: 'link', trigger: link } );
+		},
+		true
+	);
 
 	window.addEventListener( 'hashchange', () => {
 		const slug = slugFromUrl( window.location.href, prefix, formats );

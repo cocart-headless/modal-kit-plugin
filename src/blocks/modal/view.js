@@ -191,20 +191,27 @@ const { state } = store( 'modal-kit', {
 
 				// Any link or button in the modal, other than closing it, is the
 				// call to action ("stop after the visitor clicks a button").
-				dialog.addEventListener( 'click', ( event ) => {
-					const target = event.target.closest?.(
-						'a[href], button, .wp-block-button__link'
-					);
+				// On the document in the capture phase, beside the link
+				// listener, which stops clicks on links to modals.
+				document.addEventListener(
+					'click',
+					( event ) => {
+						const target = event.target.closest?.(
+							'a[href], button, .wp-block-button__link'
+						);
 
-					if (
-						target &&
-						! target.closest( '.modal-kit__close' ) &&
-						target.dataset.modalKitAction !== 'close' &&
-						state.remember !== false
-					) {
-						markSeen( config.slug, { cta: true } );
-					}
-				} );
+						if (
+							target &&
+							dialog.contains( target ) &&
+							! target.closest( '.modal-kit__close' ) &&
+							target.dataset.modalKitAction !== 'close' &&
+							state.remember !== false
+						) {
+							markSeen( config.slug, { cta: true } );
+						}
+					},
+					true
+				);
 
 				// Add-ons open modals for their own triggers (e.g. "Added to
 				// cart"); rules apply unless the source is a link.
