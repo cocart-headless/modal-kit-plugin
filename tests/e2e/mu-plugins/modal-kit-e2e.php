@@ -232,9 +232,13 @@ add_filter( 'woocommerce_prevent_automatic_wizard_redirect', '__return_true' );
 
 /*
  * Modal Kit Pro licensing: a fake license API on modalkitwp.com (key
- * "MK-PRO-E2E" works, "MK-FULL" has no sites left) and a fake update
+ * "MODALKIT-0E2E0000-0000-4000-8000-000000000001" works, "MODALKIT-0E2E0000-0000-4000-8000-000000000002" has no sites left) and a fake update
  * endpoint offering 9.9.9, with 0.0.9 to roll back to.
  */
+
+// The test site is "local", where Pro only validates keys. Treat it as live,
+// so the license spec covers activation and the site limit.
+add_filter( 'modal_kit_pro_is_staging', '__return_false' );
 
 // Never install a rollback here: the plugins are linked to the repo.
 add_filter(
@@ -263,7 +267,7 @@ add_filter(
 			$body    = json_decode( (string) $args['body'], true );
 			$license = array(
 				'status'            => 'granted',
-				'display_key'       => 'MK-PRO-****-E2E',
+				'display_key'       => 'MODALKIT-****-0001',
 				'limit_activations' => 1,
 				'expires_at'        => '2027-10-10T00:00:00Z',
 			);
@@ -272,11 +276,11 @@ add_filter(
 				return $json( 204, array() );
 			}
 
-			if ( 'MK-FULL' === ( $body['key'] ?? '' ) ) {
+			if ( 'MODALKIT-0E2E0000-0000-4000-8000-000000000002' === ( $body['key'] ?? '' ) ) {
 				return $json( 403, array( 'error' => 'NotPermitted' ) );
 			}
 
-			if ( 'MK-PRO-E2E' !== ( $body['key'] ?? '' ) ) {
+			if ( 'MODALKIT-0E2E0000-0000-4000-8000-000000000001' !== ( $body['key'] ?? '' ) ) {
 				return $json( 404, array( 'error' => 'ResourceNotFound' ) );
 			}
 
