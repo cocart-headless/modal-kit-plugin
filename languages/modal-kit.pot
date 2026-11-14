@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-09T22:47:20+00:00\n"
+"POT-Creation-Date: 2026-11-14T17:20:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: modal-kit\n"
@@ -35,7 +35,7 @@ msgid "Sébastien Dumont"
 msgstr ""
 
 #: build/blocks/modal/render.php:33
-#: includes/Render.php:263
+#: includes/Render.php:282
 msgid "Pause"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 
 #: includes/Admin/ModalList.php:140
 #: includes/Patterns.php:33
-#: includes/Render.php:265
+#: includes/Render.php:284
 #: includes/VideoLinks.php:143
 #: build/admin/wizard.js:1
 #: build/blocks/modal/index.js:22
@@ -419,28 +419,28 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: includes/Render.php:264
+#: includes/Render.php:283
 #: includes/Video.php:217
 #: includes/VideoLinks.php:89
 msgid "Play video"
 msgstr ""
 
 #. translators: %s: video service, e.g. YouTube.
-#: includes/Render.php:267
+#: includes/Render.php:286
 #: includes/Video.php:212
 #, php-format
 msgid "Loads from %s, which may set cookies."
 msgstr ""
 
-#: includes/Render.php:268
+#: includes/Render.php:287
 msgid "Resume"
 msgstr ""
 
-#: includes/Render.php:269
+#: includes/Render.php:288
 msgid "Copied ✓"
 msgstr ""
 
-#: includes/Render.php:270
+#: includes/Render.php:289
 msgid "Couldn’t copy. Select the text and copy it yourself."
 msgstr ""
 
