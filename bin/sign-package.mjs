@@ -6,11 +6,13 @@
  *   node bin/sign-package.mjs <file.zip>     Prints the signature and writes <file.zip>.sig.
  *                                            Reads MODAL_KIT_SIGNING_KEY.
  *
- * The signature covers the whole zip and is base64, as the update server sends
- * it in `signatures`. Signing refuses a private key that doesn't match
+ * The signature covers the zip's SHA-384 hash (raw bytes), as WordPress core
+ * signs its own packages, and is base64, as the update server sends it in
+ * `signatures`. Signing refuses a private key that doesn't match
  * Updater::PUBLIC_KEY, so a release can't go out signed with the wrong key.
  */
 import {
+	createHash,
 	createPrivateKey,
 	createPublicKey,
 	generateKeyPairSync,
@@ -93,13 +95,13 @@ if ( signingPublic !== shipped ) {
 	);
 }
 
-const zip = readFileSync( arg );
-const signature = sign( null, zip, privateKey );
+const digest = createHash( 'sha384' ).update( readFileSync( arg ) ).digest();
+const signature = sign( null, digest, privateKey );
 
 if (
 	! verify(
 		null,
-		zip,
+		digest,
 		createPublicKey( {
 			format: 'der',
 			type: 'spki',

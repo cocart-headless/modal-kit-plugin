@@ -730,6 +730,10 @@ final class Updater {
 	/**
 	 * Whether a file carries a valid signature.
 	 *
+	 * Packages are signed over the file's SHA-384 hash (raw bytes), as
+	 * WordPress core signs its own (verify_file_signature()). The hash is
+	 * read in chunks, so a large package doesn't have to fit in memory.
+	 *
 	 * @param string $file      File path.
 	 * @param string $signature Base64 signature.
 	 * @param string $key       Hex public key.
@@ -738,14 +742,14 @@ final class Updater {
 	public static function signature_ok( $file, $signature, $key ) {
 		$raw_signature = base64_decode( $signature, true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Not obfuscation: a signature.
 		$raw_key       = ctype_xdigit( $key ) ? hex2bin( $key ) : false;
-		$contents      = is_readable( $file ) ? file_get_contents( $file ) : false; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- A local file.
+		$hash          = is_readable( $file ) ? hash_file( 'sha384', $file, true ) : false;
 
-		if ( false === $raw_signature || false === $raw_key || false === $contents || SODIUM_CRYPTO_SIGN_BYTES !== strlen( $raw_signature ) || SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES !== strlen( $raw_key ) ) {
+		if ( false === $raw_signature || false === $raw_key || false === $hash || SODIUM_CRYPTO_SIGN_BYTES !== strlen( $raw_signature ) || SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES !== strlen( $raw_key ) ) {
 			return false;
 		}
 
 		try {
-			return sodium_crypto_sign_verify_detached( $raw_signature, $contents, $raw_key );
+			return sodium_crypto_sign_verify_detached( $raw_signature, $hash, $raw_key );
 		} catch ( \Exception $exception ) {
 			return false;
 		}
