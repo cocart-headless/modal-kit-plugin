@@ -61,6 +61,10 @@ Modal Kit works with block themes and classic themes. If you build themes and wa
 
 If something doesn't work as you expect, or you have an idea, please use the [support form](https://modalkitwp.com/support/). It helps to include your WordPress version, your theme and the steps that show the problem.
 
+## Contributing
+
+To work on the code, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 Modal Kit is [GPL-2.0-or-later](license.txt). The bundled fonts are under the SIL Open Font License 1.1, and their licences are in [`assets/fonts`](assets/fonts).
