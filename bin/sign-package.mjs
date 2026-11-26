@@ -2,7 +2,7 @@
  * Ed25519 signatures for update packages, which the updater checks before
  * installing (Updater::verify_download()).
  *
- *   node bin/sign-package.mjs --keygen       Prints a new key pair. Keep the private key out of the repo.
+ *   node bin/sign-package.mjs --keygen       Prints a new key pair.
  *   node bin/sign-package.mjs <file.zip>     Prints the signature and writes <file.zip>.sig.
  *                                            Reads MODAL_KIT_SIGNING_KEY.
  *
@@ -73,8 +73,8 @@ const signingPublic = fromUrl(
 	createPublicKey( privateKey ).export( { format: 'jwk' } ).x
 ).toString( 'hex' );
 
-// The release that changes the key is signed with the previous one, which
-// the sites installing it still trust. Name it to allow that, and only that.
+// Also accepts the key named in MODAL_KIT_PREVIOUS_PUBLIC_KEY, which sites on
+// the previous release still trust.
 const previous = ( process.env.MODAL_KIT_PREVIOUS_PUBLIC_KEY ?? '' ).trim();
 const trusted =
 	signingPublic === shipped ||

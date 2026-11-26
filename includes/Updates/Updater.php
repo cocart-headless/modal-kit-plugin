@@ -20,8 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * they are about.
  *
  * The plugins carry `Update URI: https://modalkitwp.com/`, so WordPress.org is
- * never asked about them; WordPress asks through `update_plugins_modalkitwp.com`,
- * a name that only has to be ours.
+ * never asked about them; WordPress asks through `update_plugins_modalkitwp.com`.
  *
  * A plugin's update endpoint (`plugin-info/{slug}.json`) says which version is
  * out and, when the plugin may have it, includes the download links: always
@@ -37,23 +36,18 @@ defined( 'ABSPATH' ) || exit;
 final class Updater {
 
 	/**
-	 * The package server. Not filterable: an override would let a must-use
-	 * plugin feed an unmodified copy from somebody else's server.
+	 * The package server.
 	 */
 	const SERVER = 'https://packages.cocartheadless.com';
 
 	/**
-	 * Hosts update packages can come from, always over HTTPS. Add a CDN's host
-	 * here if packages move off the package server.
+	 * Hosts update packages can come from, always over HTTPS.
 	 */
 	const PACKAGE_HOSTS = array( 'packages.cocartheadless.com' );
 
 	/**
-	 * Hex Ed25519 public key that update packages must be signed with. The
-	 * private key signs each release zip in release.yml (bin/sign-package.mjs)
-	 * and never goes to the update server, so taking that server over isn't
-	 * enough to push code to every site. Changing it is a key rotation: sites
-	 * only trust a new key once they've updated to a release that has it.
+	 * Hex Ed25519 public key that every update package must be signed with.
+	 * A package whose signature doesn't match isn't installed.
 	 */
 	const PUBLIC_KEY = 'b08c1c415329f8ffa0f866cce83915392177d93c5034a2186c905d261ca13ee8';
 
@@ -759,8 +753,7 @@ final class Updater {
 
 	/**
 	 * Downloads and checks this plugin's packages before WordPress installs
-	 * them. The signature is made away from the update server, so taking over
-	 * that server isn't enough to reach every site.
+	 * them.
 	 *
 	 * @param mixed                $reply      Earlier filters' answer.
 	 * @param string               $package    Package address.
@@ -778,9 +771,8 @@ final class Updater {
 	 *
 	 * A package is this plugin's when the upgrade is for the plugin or its
 	 * language packs, whatever its address, or when its address is in the
-	 * update info. Going by the upgrade, not only the address, means an update
-	 * server that stops answering (or leaves the link out) at install time
-	 * can't get an older, unlisted address installed unchecked.
+	 * update info. Going by the upgrade, not only the address, means every
+	 * package for this plugin is checked, even one whose address isn't listed.
 	 *
 	 * @param mixed                $reply      Earlier filters' answer.
 	 * @param string               $package    Package address.

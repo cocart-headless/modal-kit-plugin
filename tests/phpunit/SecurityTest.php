@@ -1,7 +1,7 @@
 <?php
 /**
- * Regression tests for the security review before the first release.
- * Each test replays what an attacker would do.
+ * Security regression tests. Each test replays a harmful request or input
+ * and checks it is refused or cleaned.
  *
  * @package ModalKit
  */

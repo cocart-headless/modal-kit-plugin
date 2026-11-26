@@ -5,9 +5,8 @@
  *   npm run wporg:blueprint            write .wordpress-org/blueprints/blueprint.json,
  *                                      the WordPress.org "Live Preview" one
  *   npm run wporg:blueprint -- --server=<file>
- *                                      also write the package server's demo
- *                                      blueprint (its blueprints/modal-kit.json):
- *                                      no install step, as the server installs
+ *                                      also write a demo blueprint with no
+ *                                      install step, for a host that installs
  *                                      the release zip first
  *   npm run wporg:blueprint -- --local also write a test bundle in
  *                                      artifacts/blueprint/ that installs the

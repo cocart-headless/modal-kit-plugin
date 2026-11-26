@@ -7,8 +7,8 @@ name: Release
 #   version -> development.yml -> testing.yml -> publish
 #
 # publish signs the zip and makes the GitHub release (zip and .sig). Sites get
-# their updates from the package server (packages.cocartheadless.com), which
-# reads the releases and signatures from here. Modal Kit isn't on WordPress.org.
+# their updates from packages.cocartheadless.com. Modal Kit isn't on
+# WordPress.org.
 
 on:
   push:
@@ -52,11 +52,6 @@ jobs:
       - run: npm run plugin-zip
       # Sites refuse an update that isn't signed with the key in
       # Updater::PUBLIC_KEY, so nothing is published without a signature.
-      # Repository secret MODAL_KIT_SIGNING_KEY: the hex private key from
-      # `node bin/sign-package.mjs --keygen`, the same one Modal Kit Pro's
-      # releases use. It never goes to the package server.
-      # Variable MODAL_KIT_PREVIOUS_PUBLIC_KEY: set only for the release that
-      # changes the key, signed with the previous key.
       - name: Sign the zip
         env:
           MODAL_KIT_SIGNING_KEY: ${{ secrets.MODAL_KIT_SIGNING_KEY }}

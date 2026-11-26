@@ -4,8 +4,8 @@
  * plain slug, so WordPress installs it in the usual place.
  *
  * npm's file list always adds package.json and the root README.md. A live
- * site needs neither, so they come out here. Pro has no readme.txt and keeps
- * its README.md: its repo is private, so the zip is where customers read it.
+ * site needs neither, so they come out here. A plugin without a readme.txt
+ * keeps its README.md.
  *
  *   npm run plugin-zip
  */

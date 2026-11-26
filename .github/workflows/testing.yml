@@ -22,7 +22,7 @@ jobs:
       matrix:
         # From the plugin's minimum (Requires PHP) to the newest PHP release.
         php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-        # Latest and the release before it. Bump the second when WordPress ships a new major.
+        # Latest and the release before it.
         wp: ['latest', '7.0']
         # The minimum (Requires at least), on the oldest and the PHP we develop on:
         # older WordPress isn't tested by its own project on the newest PHP.
