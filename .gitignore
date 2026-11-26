@@ -25,3 +25,7 @@ phpunit.xml
 Thumbs.db
 .idea/
 *.log
+
+# Kept locally: notes for Claude Code and the development guide
+CLAUDE.md
+/DEVELOPMENT.md
