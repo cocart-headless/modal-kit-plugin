@@ -272,8 +272,12 @@ class UpdatesTest extends WP_UnitTestCase {
 		$public  = bin2hex( sodium_crypto_sign_publickey( $pair ) );
 		$secret  = sodium_crypto_sign_secretkey( $pair );
 		$zip     = 'the package';
-		$good    = base64_encode( sodium_crypto_sign_detached( $zip, $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		// Signed over the SHA-384 hash, as bin/sign-package.mjs signs.
+		$good    = base64_encode( sodium_crypto_sign_detached( hash( 'sha384', $zip, true ), $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		// Signed over the whole file: not accepted.
+		$whole   = base64_encode( sodium_crypto_sign_detached( $zip, $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 		$bad     = base64_encode( sodium_crypto_sign_detached( 'something else', $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		$bad_sum = base64_encode( sodium_crypto_sign_detached( hash( 'sha384', 'something else', true ), $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 		$url     = 'https://packages.cocartheadless.com/modal-kit.zip';
 		$updater = $this->updater();
 		$ours    = array( 'plugin' => $updater->basename() );
@@ -281,7 +285,9 @@ class UpdatesTest extends WP_UnitTestCase {
 		$file = wp_tempnam( 'signed' );
 		file_put_contents( $file, $zip ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		$this->assertTrue( Updater::signature_ok( $file, $good, $public ) );
+		$this->assertFalse( Updater::signature_ok( $file, $whole, $public ), 'Only a signature over the SHA-384 hash is accepted.' );
 		$this->assertFalse( Updater::signature_ok( $file, $bad, $public ) );
+		$this->assertFalse( Updater::signature_ok( $file, $bad_sum, $public ) );
 		$this->assertFalse( Updater::signature_ok( $file, 'not base64!', $public ) );
 		$this->assertFalse( Updater::signature_ok( $file, $good, 'nothex' ) );
 		wp_delete_file( $file );
