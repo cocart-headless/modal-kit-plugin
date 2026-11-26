@@ -1,10 +1,14 @@
 /**
- * Builds the WordPress.org "Live Preview" blueprint for the free plugin:
- * .wordpress-org/blueprints/blueprint.json, which goes to the plugin's
- * SVN assets/blueprints/ folder. The demo content is bin/blueprint/demo.php,
- * embedded as a runPHP step.
+ * Builds the Playground blueprints for the free plugin's demo. The demo
+ * content is bin/blueprint/demo.php, embedded as a runPHP step.
  *
- *   npm run wporg:blueprint            write the blueprint
+ *   npm run wporg:blueprint            write .wordpress-org/blueprints/blueprint.json,
+ *                                      the WordPress.org "Live Preview" one
+ *   npm run wporg:blueprint -- --server=<file>
+ *                                      also write the package server's demo
+ *                                      blueprint (its blueprints/modal-kit.json):
+ *                                      no install step, as the server installs
+ *                                      the release zip first
  *   npm run wporg:blueprint -- --local also write a test bundle in
  *                                      artifacts/blueprint/ that installs the
  *                                      local zip (npm run plugin-zip first)
@@ -30,9 +34,10 @@ const LOCAL = join( ROOT, 'artifacts/blueprint' );
 const ZIP = releaseZip( 'modal-kit' );
 
 /**
- * The blueprint, installing the plugin from the given resource.
+ * The blueprint, installing the plugin from the given resource, or with no
+ * install step when there's none.
  *
- * @param {Object} plugin Plugin resource.
+ * @param {Object|null} plugin Plugin resource.
  * @return {Object} Blueprint.
  */
 export function blueprint( plugin ) {
@@ -48,11 +53,15 @@ export function blueprint( plugin ) {
 		features: { networking: true },
 		login: true,
 		steps: [
-			{
-				step: 'installPlugin',
-				pluginData: plugin,
-				options: { activate: true },
-			},
+			...( plugin
+				? [
+						{
+							step: 'installPlugin',
+							pluginData: plugin,
+							options: { activate: true },
+						},
+					]
+				: [] ),
 			{
 				step: 'runPHP',
 				code: readFileSync(
@@ -74,6 +83,14 @@ write(
 	OUT,
 	blueprint( { resource: 'wordpress.org/plugins', slug: 'modal-kit' } )
 );
+
+const server = process.argv
+	.find( ( arg ) => arg.startsWith( '--server=' ) )
+	?.slice( '--server='.length );
+
+if ( server ) {
+	write( server, blueprint( null ) );
+}
 
 if ( process.argv.includes( '--local' ) ) {
 	if ( ! existsSync( ZIP ) ) {

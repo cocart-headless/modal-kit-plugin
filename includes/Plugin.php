@@ -74,6 +74,7 @@ final class Plugin {
 
 		( new Rest\Tools() )->register_hooks();
 		( new Rest\StyleLibrary() )->register_hooks();
+		( new Updates\Routes() )->register_hooks();
 
 		if ( is_admin() ) {
 			( new Admin\ModalList() )->register_hooks();

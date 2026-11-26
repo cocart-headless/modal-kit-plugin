@@ -30,6 +30,12 @@
 	.description {
 		max-width: 520px;
 	}
+
+	// The components' help grey (#757575) is under 4.5:1 on the admin's
+	// #f0f0f0; WordPress's own descriptions use #646970.
+	.components-base-control__help {
+		color: #646970;
+	}
 }
 
 .modal-kit-settings__notice {
@@ -201,4 +207,41 @@
 	background: #f0f0f0;
 	font-size: 11px;
 	font-weight: 600;
+}
+
+// Settings → Updates.
+.modal-kit-updates {
+	max-width: 640px;
+
+	> .components-toggle-control {
+		margin-top: 16px;
+	}
+}
+
+.modal-kit-updates__channel,
+.modal-kit-updates__row {
+	margin-top: 16px;
+}
+
+.modal-kit-updates__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: flex-end;
+
+	p {
+		margin: 0;
+		align-self: center;
+	}
+
+	.components-base-control {
+		min-width: 200px;
+	}
+}
+
+.modal-kit-updates__actions {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+	margin-top: 24px;
 }

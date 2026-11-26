@@ -231,22 +231,18 @@ add_filter( 'woocommerce_enable_setup_wizard', '__return_false' );
 add_filter( 'woocommerce_prevent_automatic_wizard_redirect', '__return_true' );
 
 /*
- * Modal Kit Pro licensing: a fake license API on modalkitwp.com (key
+ * The package server: a fake license API for Modal Kit Pro (key
  * "MODALKIT-0E2E0000-0000-4000-8000-000000000001" works, "MODALKIT-0E2E0000-0000-4000-8000-000000000002" has no sites left) and a fake update
- * endpoint offering 9.9.9, with 0.0.9 to roll back to.
+ * endpoint, for Modal Kit and Pro, offering 9.9.9, with 0.0.9 to roll back to.
  */
 
 // The test site is "local", where Pro only validates keys. Treat it as live,
 // so the license spec covers activation and the site limit.
 add_filter( 'modal_kit_pro_is_staging', '__return_false' );
 
-// Never install a rollback here: the plugins are linked to the repo.
-add_filter(
-	'modal_kit_pro_pre_rollback',
-	static function () {
-		return true;
-	}
-);
+// Never install a rollback here: the plugins are linked to the repos.
+add_filter( 'modal_kit_pre_rollback', '__return_true' );
+add_filter( 'modal_kit_pro_pre_rollback', '__return_true' );
 add_filter(
 	'pre_http_request',
 	static function ( $pre, $args, $url ) {
@@ -263,7 +259,7 @@ add_filter(
 			);
 		};
 
-		if ( 'modalkitwp.com' === $host && false !== strpos( $url, '/license-keys/' ) ) {
+		if ( 'packages.cocartheadless.com' === $host && false !== strpos( $url, '/license-keys/' ) ) {
 			$body    = json_decode( (string) $args['body'], true );
 			$license = array(
 				'status'            => 'granted',
@@ -295,15 +291,15 @@ add_filter(
 				: $json( 200, $license );
 		}
 
-		if ( 'modalkitwp.com' === $host ) {
+		if ( 'packages.cocartheadless.com' === $host ) {
 			return $json(
 				200,
 				array(
 					'version'       => '9.9.9',
-					'download_link' => 'https://modalkitwp.com/e2e.zip',
+					'download_link' => 'https://packages.cocartheadless.com/e2e.zip',
 					'versions'      => array(
-						'0.0.9' => 'https://modalkitwp.com/e2e-0.0.9.zip',
-						'9.9.9' => 'https://modalkitwp.com/e2e.zip',
+						'0.0.9' => 'https://packages.cocartheadless.com/e2e-0.0.9.zip',
+						'9.9.9' => 'https://packages.cocartheadless.com/e2e.zip',
 					),
 				)
 			);

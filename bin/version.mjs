@@ -4,11 +4,6 @@
  *
  *   npm version 1.2.3    Sets the version and runs this (the `version` script).
  *   npm run version      Runs this after editing package.json by hand.
- *   npm run stable       Sets the readme's Stable tag, and nothing else.
- *
- * The Stable tag is separate because it decides what WordPress.org gives
- * people, so moving it is a release decision. WordPress.org's Stable tag takes
- * numbers and periods only, so a pre-release can't become one.
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -78,22 +73,6 @@ function blockFiles( dir ) {
 	} );
 }
 
-if ( process.argv.includes( '--stable' ) ) {
-	if ( ! existsSync( join( ROOT, 'readme.txt' ) ) ) {
-		fail( `${ name } has no readme.txt, so it has no Stable tag.` );
-	}
-
-	if ( ! /^[\d.]+$/.test( version ) ) {
-		fail(
-			`${ version } is a pre-release, and a Stable tag takes numbers and periods only. Stable tag left as it was.`
-		);
-	}
-
-	update( 'readme.txt', [ [ /^(Stable tag:\s*)\S+/m, version ] ] );
-	console.log( `Stable tag is ${ version }` );
-	process.exit( 0 );
-}
-
 const constant = `${ name.toUpperCase().replace( /-/g, '_' ) }_VERSION`;
 const requirements = [
 	[ /^( \* Requires at least:\s*)\S+/m, pkg.requires ],
@@ -109,6 +88,14 @@ update( `${ name }.php`, [
 				[
 					/^( \* Modal Kit tested up to:\s*)\S+/m,
 					pkg.modal_kit_tested_up_to,
+				],
+			]
+		: [] ),
+	...( pkg.modal_kit_requires
+		? [
+				[
+					/(define\( 'MODAL_KIT_PRO_REQUIRES_MODAL_KIT', ')[^']+/,
+					pkg.modal_kit_requires,
 				],
 			]
 		: [] ),

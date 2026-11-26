@@ -57,23 +57,31 @@ The end-to-end suites (`test:e2e`, `test:browsers`, `test:static` and `test:them
 |---|---|
 | `npm version 1.2.3` | Set the version in `package.json`, then update the plugin header and constant, `block.json`, the `.pot`, the requirements in `README.md` and the lockfile. It creates no commit or tag. |
 | `npm run version` | Do the same copy after you edit `package.json` by hand |
-| `npm run stable` | Set the readme's `Stable tag`, and nothing else. It refuses a pre-release. |
-| `npm run zip` | `version`, build, regenerate the `.pot` and write the zip, leaving `Stable tag` alone |
-| `npm run ready` | The same as `zip`, plus `stable`. Use this for what goes to WordPress.org. |
+| `npm run zip` | `version`, build, regenerate the `.pot` and write the zip |
+| `node bin/sign-package.mjs --keygen` | Make the key pair for signing update packages |
+| `node bin/sign-package.mjs <zip>` | Sign a package with `MODAL_KIT_SIGNING_KEY`: prints the signature and writes `<zip>.sig`. Refuses a key that doesn't match `Updater::PUBLIC_KEY` |
 
-`Stable tag` is separate because it decides what WordPress.org gives people. It takes numbers and periods only, so a version like `1.2.3-beta.1` can't be one, and Plugin Check reports a mismatch on a `zip` build whose version is ahead of it.
+Zips are written to `releases/` as `modal-kit-<version>.zip`, replacing a zip of the same version, and Git ignores the folder. A zip holds only the paths under `files` in `package.json`, including `src/`, the source of the compiled code. Development files, such as `package.json` and `webpack.config.js`, stay out.
 
-Zips are written to `releases/` as `modal-kit-<version>.zip`, replacing a zip of the same version, and Git ignores the folder. A zip holds only the paths under `files` in `package.json`. That includes `src/`, because WordPress.org requires the source of compiled code. Development files, such as `package.json` and `webpack.config.js`, stay out.
-
-`.wordpress-org/` holds the WordPress.org banners, icons, screenshots and Live Preview blueprint, which never go in the zip. `npm run wporg:screenshots` and `npm run wporg:blueprint` rebuild them.
+Modal Kit isn't on WordPress.org. `.wordpress-org/` still holds the banners, icons, screenshots and Live Preview blueprint made for its listing, which never go in the zip; `npm run wporg:screenshots` and `npm run wporg:blueprint` rebuild them.
 
 To release:
 
 1. Run `npm version 1.2.3` and add the entry to the changelog in `readme.txt`.
-2. Run the checks above, then `npm run ready`.
+2. Run the checks above, then `npm run zip`.
 3. Commit, then push the tag: `git tag v1.2.3 && git push origin v1.2.3`.
 
-A tag with a hyphen, such as `v1.2.3-beta.1`, publishes a GitHub pre-release and never deploys to WordPress.org.
+The release signs the zip and publishes it, with its `.sig`, as a GitHub release. The package server reads the releases from there, so sites see the update within about 12 hours (sooner with **Check again** on Dashboard → Updates). A tag with a hyphen, such as `v1.2.3-beta.1`, publishes a GitHub pre-release, which only sites on the matching release channel get.
+
+## Updates
+
+Modal Kit updates from the package server at `packages.cocartheadless.com`, which serves every CoCart Headless plugin. Its code is the `cocart-headless/package-provider-php` repo, not this one, and its entry for Modal Kit is free (`premium: false`), so no license key is needed. The plugin header's `Update URI: https://modalkitwp.com/` keeps WordPress from asking WordPress.org about the slug.
+
+`includes/Updates/Updater.php` does the work, and plugins that build on Modal Kit register with it (`Updater::register()`): Modal Kit Pro does, with its license as the condition for packages. For each plugin it answers WordPress's update check (`update_plugins_modalkitwp.com`) and "View details", fetches a fresh download link at install time, checks the package's signature, and handles release channels, pausing, rollback, automatic updates, language packs and the notice after an update. Its state is in the plugin's own options (`modal_kit_update_settings`, `modal_kit_auto_update`, and the transients `modal_kit_update_info` and `modal_kit_just_updated`), removed by `uninstall.php`. `includes/Updates/Routes.php` registers Modal Kit and serves the **Updates** settings tab (`GET|POST /modal-kit/v1/updates`, `GET|POST /modal-kit/v1/updates/rollback`), for users who can update plugins on the site that manages updates (on a network, the main site).
+
+The server address (`Updater::SERVER`), the package hosts and the public key are constants, with no filters. A filter would let a must-use plugin send an unmodified copy of the plugin to someone else's update server. To try a staging server, edit the constants in a local build; don't ship them changed. `modal_kit_pre_rollback` short-circuits a rollback; the e2e mu-plugin uses it because the test site's plugins are linked to this repo.
+
+Every package must carry an Ed25519 signature made with the key in `Updater::PUBLIC_KEY`, the same key Modal Kit Pro's releases are signed with. The updater downloads the file, checks it and refuses to install it if the signature is missing or wrong, or if it can't get the update info to read the signature from. The private key lives only in the repository secret `MODAL_KIT_SIGNING_KEY` (in both repositories) and an offline backup, never on the package server. Changing the key works as in Modal Kit Pro's DEVELOPMENT.md ("Package signing"), with the new public key going in `Updater::PUBLIC_KEY` here.
 
 ## GitHub workflows
 
@@ -87,4 +95,4 @@ Only a `v*` tag runs these automatically, to save Actions minutes. Pushes and pu
 
 A tag runs the stages in order, each waiting for the one before: version check, Development, Testing, publish. If any stage fails, nothing is published. Fix the problem, delete the tag and push it again. Screenshots aren't part of this: they're compared only when `test:e2e` runs locally.
 
-To deploy stable tags to WordPress.org too, set the repository variable `WPORG_DEPLOY` to `true` and add the secrets `SVN_USERNAME` and `SVN_PASSWORD`.
+The release needs the repository secret `MODAL_KIT_SIGNING_KEY` (see Updates). For the one release that changes the signing key, set the variable `MODAL_KIT_PREVIOUS_PUBLIC_KEY` to the old public key.

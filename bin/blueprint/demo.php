@@ -1,6 +1,6 @@
 <?php
 /**
- * Demo content for the WordPress.org "Live Preview" (Playground): every free
+ * Demo content for the Playground demo: every free
  * starter as a published modal, and a front page with a button for each.
  * The Shipping notice bar opens on its own; the rest open from their button.
  *

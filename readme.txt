@@ -1,10 +1,8 @@
 === Modal Kit ===
-Contributors: sebd86
 Tags: modal, popup, slide-in, lightbox, block
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +16,7 @@ Start from one of the ready-made templates, or from a blank modal, and switch te
 
 = Beta =
 
-This is Modal Kit's first public release, labelled beta while it gathers feedback from real sites. Every feature described here is complete and free to use. If something doesn't work as you expect, or you have an idea, please say so in the support forum.
+This is Modal Kit's first public release, labelled beta while it gathers feedback from real sites. Every feature described here is complete and free to use. If something doesn't work as you expect, or you have an idea, please tell us through the support form at https://modalkitwp.com/support/.
 
 = Nine layouts, one block =
 
@@ -63,7 +61,9 @@ Multi-step modals, form blocks that send to your email service, A/B testing, a s
 
 == External services ==
 
-Modal Kit itself sends nothing anywhere. A modal only contacts a third-party service when you put that service's content in it:
+Modal Kit sends nothing about your visitors anywhere. It contacts one service of its own, for updates, and a modal only contacts a third-party service when you put that service's content in it:
+
+* **Modal Kit updates** — Modal Kit isn't on WordPress.org: it gets its updates from our package server, packages.cocartheadless.com, run by CoCart Headless, LLC. When WordPress checks for plugin updates (about twice a day), and when you open Settings → Updates, the site sends the server its address, the installed version, the release channel and the site's language, and downloads the update when you install it. No license key is needed, and nothing about your visitors is sent. Privacy policy: https://modalkitwp.com/privacy/
 
 * **YouTube** — when a modal (or a "Play in video lightbox" link) contains a YouTube video, the player loads from youtube-nocookie.com (or youtube.com if you turn off "Use youtube-nocookie.com"). With the click-to-load screen on (the default), nothing loads until the visitor presses Play. YouTube terms: https://www.youtube.com/t/terms — Google privacy policy: https://policies.google.com/privacy
 * **Vimeo** — when a modal (or a link) contains a Vimeo video, the player loads from player.vimeo.com with Do Not Track set, again behind the click-to-load screen by default. Vimeo terms: https://vimeo.com/terms — privacy policy: https://vimeo.com/privacy
@@ -80,7 +80,7 @@ The Fieldnote, Harbor and Night styles use Instrument Sans and Instrument Serif 
 
 == Installation ==
 
-1. Install Modal Kit from Plugins → Add New, or upload the zip.
+1. Download the zip from https://modalkitwp.com/, then in WordPress go to Plugins → Add New Plugin → Upload Plugin and choose it.
 2. Activate it. A short setup (two minutes, four steps) picks a starting look and polite defaults, then opens your first modal in the editor. You can skip it and run it again later from Modal Kit → Settings → Tools.
 3. Add a modal from Modal Kit → Add New Modal, choose a starter, and publish. Link to it from any button with its address, shown in the Triggers panel.
 
@@ -130,21 +130,13 @@ Each site follows its own "Delete all modals and settings when the plugin is del
 
 No. Dates, devices, browsers and frequency are checked in the visitor's browser, which is what lets a static site use them, so a modal that targets the page is already in its HTML. A discount code in a modal scheduled for next week can be found today. To keep a modal off a page, turn it off, use page targeting, or hide it from logged-in users or roles.
 
+= Where do updates come from? =
+
+From modalkitwp.com's package server, not WordPress.org, and they need no license key. Updates show in Dashboard → Updates like any other plugin's. Under Modal Kit → Settings → Updates you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 52 weeks, or roll back to an earlier version. Every update is signed, and Modal Kit refuses one whose signature doesn't check out.
+
 = How do I test frequency rules? =
 
 Settings → Tools → Reset "already seen" for my browser, or add `?modal=preview` to a page to see every modal regardless of rules (editors only).
-
-== Screenshots ==
-
-1. A native centered modal, on desktop and as it looks on a phone.
-2. The layouts: centered, split, corner, bar, drawer, full-screen, bottom sheet and video lightbox.
-3. Building a modal in the editor, shown over your own homepage.
-4. Triggers and display rules in the Modal sidebar: search pages by title as you type.
-5. Choosing a starting layout.
-6. The modal list with layouts, triggers and an on/off switch.
-7. Settings: links, frequency, display defaults with a live preview, accessibility.
-8. The video lightbox, with the click-to-load screen on a phone.
-9. The first-run setup.
 
 == Changelog ==
 

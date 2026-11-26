@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-14T17:20:54+00:00\n"
+"POT-Creation-Date: 2026-11-24T12:09:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: modal-kit\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: modal-kit.php
-msgid "https://github.com/seb86/modal-kit-plugin"
+msgid "https://modalkitwp.com/"
 msgstr ""
 
 #. Description of the plugin
@@ -481,6 +481,88 @@ msgstr ""
 msgid "This isn’t a Modal Kit export file."
 msgstr ""
 
+#: includes/Updates/Updater.php:477
+msgid "Stable"
+msgstr ""
+
+#: includes/Updates/Updater.php:478
+msgid "Fully tested releases. Recommended for live sites."
+msgstr ""
+
+#: includes/Updates/Updater.php:482
+msgid "Release candidate"
+msgstr ""
+
+#: includes/Updates/Updater.php:483
+msgid "The next stable version, shortly before it is released."
+msgstr ""
+
+#: includes/Updates/Updater.php:487
+msgid "Beta"
+msgstr ""
+
+#: includes/Updates/Updater.php:488
+msgid "New features still being tested. May have bugs: best on a staging site."
+msgstr ""
+
+#: includes/Updates/Updater.php:492
+msgid "Nightly"
+msgstr ""
+
+#: includes/Updates/Updater.php:493
+msgid "The latest unreleased build. For trying changes before anyone else."
+msgstr ""
+
+#: includes/Updates/Updater.php:515
+msgid "Choose a release channel from the list."
+msgstr ""
+
+#: includes/Updates/Updater.php:547
+msgid "Updates can be paused for up to 52 weeks."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: includes/Updates/Updater.php:810
+#, php-format
+msgid "Couldn’t get this %s package’s signature from the update server, so it wasn’t installed. Try again later."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: includes/Updates/Updater.php:818
+#, php-format
+msgid "This %s package isn’t signed, so it wasn’t installed."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: includes/Updates/Updater.php:846
+#, php-format
+msgid "This %s package failed its signature check, so it wasn’t installed."
+msgstr ""
+
+#. translators: %s: the public key, in base64.
+#: includes/Updates/Updater.php:854
+#, php-format
+msgid "Verified the package signature with the signing key %s."
+msgstr ""
+
+#: includes/Updates/Updater.php:1018
+msgid "That version isn’t available to roll back to."
+msgstr ""
+
+#: includes/Updates/Updater.php:1096
+msgid "Couldn’t install that version. Check the file permissions and try again."
+msgstr ""
+
+#. translators: 1: plugin name, 2: new version, 3: previous version.
+#: includes/Updates/Updater.php:1256
+#, php-format
+msgid "%1$s is now on version %2$s (was %3$s)."
+msgstr ""
+
+#: includes/Updates/Updater.php:1263
+msgid "What’s new"
+msgstr ""
+
 #: includes/Upsell.php:143
 msgid "Make this button go to another step, so you can build offer → email → thank-you flows inside one modal."
 msgstr ""
@@ -495,7 +577,7 @@ msgstr ""
 
 #: includes/Upsell.php:152
 #: includes/Upsell.php:160
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Multi-step modals"
 msgstr ""
 
@@ -1723,6 +1805,7 @@ msgid "It’s imported as “%s”."
 msgstr ""
 
 #: build/admin/settings.js:23
+#: build/admin/settings.js:36
 #: build/blocks/modal/index.js:17
 #: build/editor/index.js:4
 msgid "Cancel"
@@ -1751,7 +1834,7 @@ msgid "“%s” deleted."
 msgstr ""
 
 #: build/admin/settings.js:24
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Styles"
 msgstr ""
 
@@ -1913,112 +1996,240 @@ msgid "Switch and delete"
 msgstr ""
 
 #: build/admin/settings.js:34
+msgid "Earlier version"
+msgstr ""
+
+#: build/admin/settings.js:34
+msgid "Roll back"
+msgstr ""
+
+#. translators: %s: version.
+#: build/admin/settings.js:35
+#, js-format
+msgid "Roll back to %s?"
+msgstr ""
+
+#. translators: 1: installed version, 2: earlier version.
+#: build/admin/settings.js:36
+#, js-format
+msgid "Modal Kit %1$s will be replaced with %2$s. Your modals and settings stay as they are."
+msgstr ""
+
+#: build/admin/settings.js:36
+msgid "Updates are paused for a week, so the site isn’t updated again straight away. You can resume them at any time."
+msgstr ""
+
+#. translators: %s: version.
+#: build/admin/settings.js:37
+#, js-format
+msgid "Modal Kit was rolled back to %s."
+msgstr ""
+
+#. translators: %s: version.
+#: build/admin/settings.js:38
+#, js-format
+msgid "Roll back to %s"
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "There are no earlier versions to roll back to."
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "Roll back to an earlier version…"
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "On a network, Modal Kit’s updates are managed on the main site."
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "Modal Kit’s updates come from our package server, packages.cocartheadless.com, not WordPress.org. They’re free and need no license key."
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "Only people who can update plugins can change these settings."
+msgstr ""
+
+#: build/admin/settings.js:38
+msgid "Install Modal Kit updates automatically"
+msgstr ""
+
+#. translators: 1: installed version, 2: new version.
+#: build/admin/settings.js:39
+#, js-format
+msgid "Version %1$s installed · %2$s is available in Plugins."
+msgstr ""
+
+#. translators: %s: installed version.
+#: build/admin/settings.js:40
+#, js-format
+msgid "Version %s installed · up to date"
+msgstr ""
+
+#. translators: 1: previous version, 2: date.
+#: build/admin/settings.js:41
+#, js-format
+msgid "changed from %1$s on %2$s"
+msgstr ""
+
+#: build/admin/settings.js:41
+msgid "The update server couldn’t be reached on the last check. It’s tried again within the hour."
+msgstr ""
+
+#: build/admin/settings.js:41
+msgid "Release channel"
+msgstr ""
+
+#: build/admin/settings.js:41
+msgid "Release channel changed."
+msgstr ""
+
+#. translators: %s: date.
+#: build/admin/settings.js:42
+#, js-format
+msgid "Updates are paused until %s."
+msgstr ""
+
+#: build/admin/settings.js:42
+msgid "Updates resumed."
+msgstr ""
+
+#: build/admin/settings.js:42
+msgid "Resume updates"
+msgstr ""
+
+#: build/admin/settings.js:42
+msgid "Pause updates for"
+msgstr ""
+
+#. translators: %d: number of weeks.
+#: build/admin/settings.js:43
+#, js-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/admin/settings.js:43
+msgid "Updates paused."
+msgstr ""
+
+#: build/admin/settings.js:43
+msgid "Pause updates"
+msgstr ""
+
+#: build/admin/settings.js:43
 msgid "9 layouts, 8 triggers, all rules"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Form blocks + 13 integrations"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "WooCommerce templates & triggers"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Pro template collections"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Games: spin, scratch, pick a gift, slots"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Results and analytics services"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "What Pro adds"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Feature"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Free"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Pro"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Included"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Not included"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 #: build/editor/index.js:5
 msgid "Get Pro"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Already bought it?"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Download the add-on from your account"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Pro tips in the editor"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Pro tips"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Show Pro features in menus and pickers"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Turn off to hide every PRO badge, popover and Pro collection, for all users."
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "General"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Display"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 #: build/editor/index.js:10
 msgid "Accessibility"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Tools"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
+msgid "Updates"
+msgstr ""
+
+#: build/admin/settings.js:43
 msgid "Settings sections"
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Settings saved."
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Couldn’t save the settings."
 msgstr ""
 
-#: build/admin/settings.js:34
+#: build/admin/settings.js:43
 msgid "Save Changes"
 msgstr ""
 

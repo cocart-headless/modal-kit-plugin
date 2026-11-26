@@ -34,10 +34,16 @@ The full feature list is in [readme.txt](readme.txt).
 
 ## Installing
 
-Modal Kit is on its way to the WordPress.org plugin directory. Until it's listed:
+Modal Kit isn't on WordPress.org: you download it from modalkitwp.com, and it updates from there.
 
-1. Download the zip from [Releases](https://github.com/seb86/modal-kit-plugin/releases).
+1. Download the zip from [modalkitwp.com](https://modalkitwp.com/) (or [Releases](https://github.com/seb86/modal-kit-plugin/releases)).
 2. In WordPress, go to **Plugins → Add New Plugin → Upload Plugin**, choose the zip, then activate it.
+
+## Updates
+
+Updates come from modalkitwp.com's package server (`packages.cocartheadless.com`) and need no license key. They show in **Dashboard → Updates** like any other plugin's. Under **Modal Kit → Settings → Updates** you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 52 weeks, or roll back to an earlier version.
+
+Every update is signed, and Modal Kit refuses to install one whose signature doesn't check out. If your host blocks outgoing requests, allow `packages.cocartheadless.com`. On a network, updates are managed from the main site.
 
 ## Your first modal
 
@@ -53,7 +59,7 @@ Modal Kit works with block themes and classic themes. If you build themes and wa
 
 ## Feedback and support
 
-If something doesn't work as you expect, or you have an idea, please [open an issue](https://github.com/seb86/modal-kit-plugin/issues). It helps to include your WordPress version, your theme and the steps that show the problem.
+If something doesn't work as you expect, or you have an idea, please use the [support form](https://modalkitwp.com/support/). It helps to include your WordPress version, your theme and the steps that show the problem.
 
 ## Development
 

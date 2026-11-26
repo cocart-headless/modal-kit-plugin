@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Modal Kit
- * Plugin URI:        https://github.com/seb86/modal-kit-plugin
+ * Plugin URI:        https://modalkitwp.com/
  * Description:       Modals made of blocks: popups, slide-ins, bars, drawers, full-screen takeovers, bottom sheets and inline panels, built with core blocks.
  * Version:           0.1.0-preview-1
  * Requires at least: 6.8
@@ -10,6 +10,7 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       modal-kit
+ * Update URI:        https://modalkitwp.com/
  *
  * @package ModalKit
  */

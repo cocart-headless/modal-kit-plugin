@@ -15,6 +15,7 @@ import Display from './display';
 import Accessibility from './accessibility';
 import Tools from './tools';
 import Styles from './styles';
+import Updates from './updates';
 import Pro from './pro';
 import './style.scss';
 
@@ -48,6 +49,12 @@ function getTabs() {
 			saves: false,
 		},
 		{ name: 'tools', title: __( 'Tools', 'modal-kit' ), Component: Tools },
+		{
+			name: 'updates',
+			title: __( 'Updates', 'modal-kit' ),
+			Component: Updates,
+			saves: false,
+		},
 		{ name: 'pro', title: __( 'Pro', 'modal-kit' ), Component: Pro },
 	] );
 }

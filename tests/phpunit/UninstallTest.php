@@ -99,4 +99,28 @@ class UninstallTest extends WP_UnitTestCase {
 
 		$this->assertFalse( $this->switch_is_stored() );
 	}
+
+	/**
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 *
+	 * @return void
+	 */
+	public function test_update_state_always_goes() {
+		update_option( 'modal_kit_update_settings', array( 'channel' => 'beta' ) );
+		update_option( 'modal_kit_auto_update', 1 );
+		set_transient( 'modal_kit_update_info', 'error' );
+		set_transient( 'modal_kit_just_updated', '0.0.9' );
+
+		// Even with "delete everything" off: it's about the installed copy, not the site's work.
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			define( 'WP_UNINSTALL_PLUGIN', 'modal-kit/modal-kit.php' );
+		}
+		include MODAL_KIT_PATH . 'uninstall.php';
+
+		$this->assertFalse( get_option( 'modal_kit_update_settings' ) );
+		$this->assertFalse( get_option( 'modal_kit_auto_update' ) );
+		$this->assertFalse( get_transient( 'modal_kit_update_info' ) );
+		$this->assertFalse( get_transient( 'modal_kit_just_updated' ) );
+	}
 }

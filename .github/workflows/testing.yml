@@ -120,6 +120,13 @@ jobs:
       - run: npm run build
       - run: npm run plugin-zip
       - run: unzip -q releases/modal-kit-*.zip -d dist
+      # Not the plugin_repo category: Modal Kit isn't on WordPress.org, and
+      # those checks refuse a plugin with its own updater or no Stable tag.
       - uses: wordpress/plugin-check-action@v1
         with:
           build-dir: dist/modal-kit
+          categories: |
+            general
+            security
+            performance
+            accessibility

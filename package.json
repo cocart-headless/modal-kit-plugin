@@ -48,9 +48,7 @@
 		"test:themes": "node bin/test-themes.mjs",
 		"plugin-zip": "wp-scripts plugin-zip && node bin/release-zip.mjs",
 		"version": "node bin/version.mjs",
-		"stable": "node bin/version.mjs --stable",
 		"zip": "npm run version && npm run build && npm run i18n:pot && npm run plugin-zip",
-		"ready": "npm run version && npm run stable && npm run build && npm run i18n:pot && npm run plugin-zip",
 		"wporg:screenshots": "node bin/wporg-screenshots.cjs",
 		"wporg:blueprint": "node bin/blueprint.mjs",
 		"i18n:pot": "node bin/env.mjs wp i18n make-pot . languages/modal-kit.pot --slug=modal-kit --domain=modal-kit --exclude=node_modules,vendor,src,tests,bin,artifacts"
@@ -64,6 +62,7 @@
 		"@wordpress/compose": "^9.0.0",
 		"@wordpress/core-data": "^9.0.0",
 		"@wordpress/data": "^11.0.0",
+		"@wordpress/date": "^6.2.0",
 		"@wordpress/dom-ready": "^5.0.0",
 		"@wordpress/editor": "^16.0.0",
 		"@wordpress/element": "^10.0.0",

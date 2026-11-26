@@ -35,11 +35,18 @@ function modal_kit_uninstall_has_add_on() {
 }
 
 /**
- * Removes the current site's data, if the site asked for that.
+ * Removes the current site's update state, and its data if the site asked
+ * for that.
  *
  * @return void
  */
 function modal_kit_uninstall_site() {
+	// Update state is only about the installed copy, so it always goes.
+	delete_option( 'modal_kit_update_settings' );
+	delete_option( 'modal_kit_auto_update' );
+	delete_transient( 'modal_kit_update_info' );
+	delete_transient( 'modal_kit_just_updated' );
+
 	$tools = get_option( 'modal_kit_tools', array() );
 
 	if ( empty( $tools['deleteOnUninstall'] ) ) {
