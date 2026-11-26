@@ -73,7 +73,15 @@
 		backdrop-filter: blur(6px);
 	}
 
-	// Non-modal layouts stay below the admin bar.
+	// Non-modal layouts stay below the admin bar, and under its menus: they
+	// aren't in the top layer, so their z-index decides (the admin bar's is
+	// 99999). Modal layouts open in the top layer, above everything.
+	&.modal-kit--corner,
+	&.modal-kit--bar,
+	&.modal-kit--inline {
+		z-index: var(--modal-kit-z-page, 99990);
+	}
+
 	.admin-bar &.modal-kit--corner,
 	.admin-bar &.modal-kit--bar {
 		inset-block-start: var(--wp-admin--admin-bar--height, 0px);
@@ -936,3 +944,13 @@ html.modal-kit-locked {
 
 // The fixed styles come last, so they build on the rules above.
 @include meta.load-css("../../styles/fixed");
+
+// Room for an open bar (runtime/bar-space.js): the page moves down, or gains
+// room at the bottom, by the bar's height, so the bar covers nothing.
+html.modal-kit-bar-top body {
+	padding-block-start: var(--modal-kit-bar-top, 0px);
+}
+
+html.modal-kit-bar-bottom body {
+	padding-block-end: var(--modal-kit-bar-bottom, 0px);
+}

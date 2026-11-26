@@ -6,6 +6,7 @@
  * bar, inline) open with show().
  */
 import { log } from './log';
+import { releaseBarSpace, reserveBarSpace } from './bar-space';
 
 const registry = new Map();
 const gates = [];
@@ -175,6 +176,11 @@ export function openModal( slug, { source, trigger = null } ) {
 		dialog.showModal();
 	} else {
 		dialog.show();
+
+		// A bar takes its own room instead of covering the page.
+		if ( dialog.classList.contains( 'modal-kit--bar' ) ) {
+			reserveBarSpace( dialog );
+		}
 	}
 
 	if ( config.lockScroll ) {
@@ -242,6 +248,7 @@ function onClosed( entry ) {
 
 	dialog.classList.remove( 'is-closing' );
 	window.clearTimeout( entry.autoTimer );
+	releaseBarSpace( dialog );
 
 	const stillLocked = [ ...registry.values() ].some(
 		( other ) => other.dialog.open && other.config.lockScroll
