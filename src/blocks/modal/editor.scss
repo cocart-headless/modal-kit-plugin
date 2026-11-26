@@ -53,9 +53,11 @@
 	.modal-kit-editor-homepage {
 		position: absolute;
 		inset: 0;
+		// A bar moves the page out of its way, as on the site (edit.js).
+		inset-block-start: var(--modal-kit-room-top, 0px);
 		z-index: -1;
 		width: 100%;
-		height: 100%;
+		height: calc(100% - var(--modal-kit-room-top, 0px) - var(--modal-kit-room-bottom, 0px));
 		border: 0;
 		pointer-events: none;
 	}

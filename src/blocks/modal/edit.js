@@ -190,7 +190,49 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		},
 		[ backdrop, breakpoint ]
 	);
-	const ref = useMergeRefs( [ wrapper.ref, stageRef ] );
+	// Site preview: a bar pushes the page on the site, so the homepage frame
+	// moves out of its way by the bar's height (top, or bottom when the bar
+	// sits there, as it can on phones).
+	const isBar = ( attributes.modalLayout ?? '' ) === 'bar';
+	const barRoomRef = useRefEffect(
+		( node ) => {
+			const panel = node.querySelector( ':scope > .modal-kit__panel' );
+			const view = node.ownerDocument.defaultView;
+
+			if ( ! isBar || ! showHomepage || ! panel ) {
+				return;
+			}
+
+			const update = () => {
+				const stage = node.getBoundingClientRect();
+				const rect = panel.getBoundingClientRect();
+				const top =
+					rect.top + rect.height / 2 - stage.top < stage.height / 2;
+				const room = `${ Math.ceil( rect.height ) }px`;
+
+				node.style.setProperty(
+					'--modal-kit-room-top',
+					top ? room : '0px'
+				);
+				node.style.setProperty(
+					'--modal-kit-room-bottom',
+					top ? '0px' : room
+				);
+			};
+			const observer = new view.ResizeObserver( update );
+
+			observer.observe( panel );
+			observer.observe( node );
+
+			return () => {
+				observer.disconnect();
+				node.style.removeProperty( '--modal-kit-room-top' );
+				node.style.removeProperty( '--modal-kit-room-bottom' );
+			};
+		},
+		[ isBar, showHomepage, isMobile ]
+	);
+	const ref = useMergeRefs( [ wrapper.ref, stageRef, barRoomRef ] );
 
 	const changeBackdrop = ( value ) => {
 		setBackdrop( value );
