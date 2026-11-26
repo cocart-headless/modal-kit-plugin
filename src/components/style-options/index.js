@@ -19,7 +19,7 @@ import {
 import { useInstanceId, useRefEffect } from '@wordpress/compose';
 import { check } from '@wordpress/icons';
 
-import { accentProblem, contrast, textOn } from '../../styles/contrast';
+import { accentProblem, contrast, textOn, toHex } from '../../styles/contrast';
 import { fixedStyles } from '../../styles';
 
 /**
@@ -184,6 +184,29 @@ function Segmented( { label, hideLabel, value, options, onChange } ) {
 }
 
 /**
+ * The palette color a saved hex accent came from, so its swatch shows as
+ * picked, or the hex itself.
+ *
+ * @param {Object[]} colors Palettes: { name, colors: [ { name, color } ] }, or colors.
+ * @param {string}   hex    Saved accent.
+ * @return {string|undefined} Color to mark.
+ */
+function swatchFor( colors, hex ) {
+	if ( ! hex ) {
+		return undefined;
+	}
+
+	const flat = ( colors ?? [] ).flatMap( ( entry ) =>
+		entry.colors ? entry.colors : [ entry ]
+	);
+
+	return (
+		flat.find( ( { color } ) => toHex( color ) === hex.toLowerCase() )
+			?.color ?? hex
+	);
+}
+
+/**
  * @param {Object}                                               props                Props.
  * @param {string}                                               props.styleSlug      Fixed style slug.
  * @param {{accent: string, accentColor: string, fonts: string}} props.value          Options.
@@ -279,11 +302,13 @@ export function StyleOptions( {
 			{ accent === 'custom' && (
 				<ColorPalette
 					colors={ colors }
-					value={ value.accentColor || undefined }
+					value={ swatchFor( colors, value.accentColor ) }
 					clearable={ false }
 					enableAlpha={ false }
+					// Saved as hex: themes often give their colors as oklch(),
+					// which the contrast check and the site can't use.
 					onChange={ ( next ) =>
-						onChange( { accentColor: next ?? '' } )
+						onChange( { accentColor: toHex( next ) } )
 					}
 				/>
 			) }
