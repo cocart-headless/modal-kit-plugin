@@ -122,6 +122,10 @@ $footer = '<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"v
 // Cart, Checkout and My account included).
 $menu = array();
 if ( $index ) {
+	// Where the welcome page isn't the home page, the menu leads to it.
+	if ( (int) get_option( 'page_on_front' ) !== $index->ID ) {
+		$menu[] = $item( 'Welcome', get_permalink( $index ) );
+	}
 	$menu[] = $item( 'Every demo', get_permalink( $index ) . '#demos' );
 }
 if ( $styles ) {

@@ -989,9 +989,29 @@ $links = static function ( $buttons ) {
 	return '<!-- wp:buttons --><div class="wp-block-buttons">' . implode( '', $inner ) . '</div><!-- /wp:buttons -->';
 };
 
-$soft     = Patterns::color( 'accent-soft' );
-$dark     = Patterns::color( 'contrast' );
-$light    = Patterns::color( 'base' );
+// The palette by lightness, as slugs differ from theme to theme: the
+// lightest color for the page, a pale tint for cards and the darkest for the
+// dark band. Colors that aren't plain hex (var(), rgba()) are left out.
+$shades = array();
+foreach ( (array) wp_get_global_settings( array( 'color', 'palette', 'theme' ) ) as $swatch ) {
+	$hex = isset( $swatch['color'] ) ? ltrim( (string) $swatch['color'], '#' ) : '';
+
+	if ( preg_match( '/^[0-9a-f]{6}$/i', $hex ) ) {
+		list( $red, $green, $blue ) = array_map( 'hexdec', str_split( $hex, 2 ) );
+		$shades[ $swatch['slug'] ]  = ( 0.2126 * $red + 0.7152 * $green + 0.0722 * $blue ) / 255;
+	}
+}
+asort( $shades );
+$pale  = array_filter(
+	$shades,
+	static function ( $lightness ) {
+		return $lightness > 0.85;
+	}
+);
+$light = $shades ? (string) array_key_last( $shades ) : Patterns::color( 'base' );
+$dark  = $shades ? (string) array_key_first( $shades ) : Patterns::color( 'contrast' );
+// The palest color after the page's own, else no fill.
+$soft = count( $pale ) > 1 ? (string) array_keys( $pale )[ count( $pale ) - 2 ] : ( $shades ? '' : Patterns::color( 'accent-soft' ) );
 $lead     = Patterns::font_size( 'large' );
 $small    = Patterns::font_size( 'small' );
 // Three across, fewer on narrow screens.
@@ -1144,7 +1164,8 @@ $start = $section(
 
 $about = $section(
 	array(
-		$h( $every_time ? 'Every modal opens, every time' : 'How often modals open' ),
+		// Some themes color headings themselves: this one takes the band's.
+		'<!-- wp:heading {"textColor":"' . esc_attr( $light ) . '"} --><h2 class="wp-block-heading has-' . esc_attr( $light ) . '-color has-text-color">' . esc_html( $every_time ? 'Every modal opens, every time' : 'How often modals open' ) . '</h2><!-- /wp:heading -->',
 		$p(
 			$every_time
 				? 'A fresh install opens at most one modal automatically per page, waits 20 seconds before the next, and remembers which modals a visitor has seen, so nobody is shown the same one over and over. This demo turns all three off, so you can go from demo to demo and see each modal open. Change them back under <a href="' . esc_url( $settings ) . '">Modal Kit → Settings → General</a>.'
