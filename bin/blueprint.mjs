@@ -112,7 +112,10 @@ const server =
 		.find( ( arg ) => arg.startsWith( '--server=' ) )
 		?.slice( '--server='.length ) ??
 	( process.env.PACKAGE_PROVIDER_PATH &&
-		join( process.env.PACKAGE_PROVIDER_PATH, 'blueprints/modal-kit.json' ) );
+		join(
+			process.env.PACKAGE_PROVIDER_PATH,
+			'blueprints/modal-kit.json'
+		) );
 
 if ( ! server ) {
 	console.error(
