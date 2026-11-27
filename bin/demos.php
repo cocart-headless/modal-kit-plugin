@@ -502,8 +502,10 @@ $site_limits = implode(
 		)
 	)
 );
-$listing  = array();
-$order    = 0;
+// The Playground demo turns all three off, so every modal opens every time.
+$every_time = ! $limit && ! $cooldown && 'none' === $general['remember'];
+$listing    = array();
+$order      = 0;
 
 foreach ( $demos as $demo ) {
 	list( $page ) = $upsert(
@@ -652,7 +654,11 @@ foreach ( $demos as $demo ) {
 		$blocks[] = $items( array_map( 'esc_html', array_unique( $hints ) ) );
 	}
 
-	$blocks[] = $p( 'Reload the demo clears what your browser remembers about modals and loads this page again, as a first-time visitor sees it. That matters here: ' . esc_html( $site_limits ) . ' (Settings → General), so coming straight from another demo can hold this one back. Open it now opens the modal straight away: links always work, whatever the rules say.' );
+	$blocks[] = $p(
+		$every_time
+			? 'This demo site opens every modal every time: no limit on automatic opens, no cool-down, and nothing remembered (Settings → General). Reload the demo loads this page again. Open it now opens the modal straight away: links always work, whatever the rules say.'
+			: 'Reload the demo clears what your browser remembers about modals and loads this page again, as a first-time visitor sees it. That matters here: ' . esc_html( $site_limits ) . ' (Settings → General), so coming straight from another demo can hold this one back. Open it now opens the modal straight away: links always work, whatever the rules say.'
+	);
 	$blocks[] = $actions( $dom_id );
 
 	if ( ! empty( $demo['carousel'] ) && $pro ) {
@@ -695,7 +701,11 @@ foreach ( $demos as $demo ) {
 		)
 	);
 
-	$listing[ $demo['group'] ][] = '<a href="' . esc_url( get_permalink( $page ) ) . '">' . esc_html( $demo['title'] ) . '</a>' . ( $demo['description'] ? ': ' . esc_html( $demo['description'] ) : '' );
+	$listing[ $demo['group'] ][] = array(
+		'title'       => $demo['title'],
+		'url'         => get_permalink( $page ),
+		'description' => $demo['description'],
+	);
 }
 
 /* All at once: several modals on one page, with no limit -------------------- */
@@ -809,23 +819,342 @@ if ( file_exists( __DIR__ . '/demos-mu-plugin.php' ) ) {
 
 /* The index ---------------------------------------------------------------- */
 
-ksort( $listing );
-$blocks = array(
-	$p( ( $pro ? 'Every Modal Kit starter and Pro feature' : 'Every Modal Kit starter' ) . ', each with real conditions on a page of its own. Each page explains when its modal opens and has a Reload the demo button.' ),
-	$p( '<strong><a href="' . esc_url( get_permalink( $together ) ) . '">All at once</a></strong>: ' . count( $steps ) . ' modals in different layouts on one page, with no auto-open limit or cool-down.' ),
+// A welcome page in the theme's own colours and type: a hero with a real
+// modal behind its first button, where to start, how this site differs from
+// a fresh install, and a card for every demo.
+
+/**
+ * A Group block (matches core/group save).
+ *
+ * @param string[]             $inner Inner block markup.
+ * @param array<string, mixed> $args  align, text, background, link (color preset), padding (side => spacing preset), radius, layout, anchor.
+ */
+$section = static function ( $inner, $args = array() ) {
+	$attrs   = array();
+	$classes = array( 'wp-block-group' );
+	$css     = array();
+	$text    = isset( $args['text'] ) ? $args['text'] : '';
+	$fill    = isset( $args['background'] ) ? $args['background'] : '';
+
+	if ( ! empty( $args['anchor'] ) ) {
+		$attrs['anchor'] = $args['anchor'];
+	}
+	if ( ! empty( $args['align'] ) ) {
+		$attrs['align'] = $args['align'];
+		$classes[]      = 'align' . $args['align'];
+	}
+	if ( $text ) {
+		$attrs['textColor'] = $text;
+	}
+	if ( $fill ) {
+		$attrs['backgroundColor'] = $fill;
+	}
+	$classes = array_merge( $classes, Patterns::color_classes( $text, $fill ) );
+
+	if ( ! empty( $args['link'] ) ) {
+		$attrs['style']['elements']['link']['color']['text'] = 'var:preset|color|' . $args['link'];
+		$classes[] = 'has-link-color';
+	}
+	if ( ! empty( $args['radius'] ) ) {
+		$attrs['style']['border']['radius'] = $args['radius'];
+		$css[]                              = 'border-radius:' . $args['radius'];
+	}
+	foreach ( isset( $args['padding'] ) ? $args['padding'] : array() as $side => $size ) {
+		$attrs['style']['spacing']['padding'][ $side ] = 'var:preset|spacing|' . $size;
+		$css[] = 'padding-' . $side . ':var(--wp--preset--spacing--' . $size . ')';
+	}
+	$attrs['layout'] = isset( $args['layout'] ) ? $args['layout'] : array( 'type' => 'constrained' );
+
+	return '<!-- wp:group ' . wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . ' -->'
+		. '<div' . ( ! empty( $args['anchor'] ) ? ' id="' . esc_attr( $args['anchor'] ) . '"' : '' ) . ' class="' . esc_attr( implode( ' ', $classes ) ) . '"' . ( $css ? ' style="' . esc_attr( implode( ';', $css ) ) . '"' : '' ) . '>'
+		. implode( "\n\n", $inner )
+		. '</div><!-- /wp:group -->';
+};
+
+/**
+ * Buttons (matches core/buttons and core/button save). Links to another
+ * site open in a new tab, out of the demo.
+ *
+ * @param array<int, array{0: string, 1: string, 2?: bool}> $buttons Each: text, URL, outline.
+ */
+$links = static function ( $buttons ) {
+	$inner = array();
+
+	foreach ( $buttons as $button ) {
+		$outline  = ! empty( $button[2] );
+		$external = 0 === strpos( $button[1], 'http' ) && false === strpos( $button[1], (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
+		$attrs    = array_filter(
+			array(
+				'className'  => $outline ? 'is-style-outline' : '',
+				'linkTarget' => $external ? '_blank' : '',
+				'rel'        => $external ? 'noreferrer noopener' : '',
+			)
+		);
+		$inner[]  = '<!-- wp:button' . ( $attrs ? ' ' . wp_json_encode( $attrs ) : '' ) . ' --><div class="wp-block-button' . ( $outline ? ' is-style-outline' : '' ) . '"><a class="wp-block-button__link wp-element-button" href="' . esc_url( $button[1] ) . '"' . ( $external ? ' target="_blank" rel="noreferrer noopener"' : '' ) . '>' . esc_html( $button[0] ) . '</a></div><!-- /wp:button -->';
+	}
+
+	return '<!-- wp:buttons --><div class="wp-block-buttons">' . implode( '', $inner ) . '</div><!-- /wp:buttons -->';
+};
+
+$soft     = Patterns::color( 'accent-soft' );
+$dark     = Patterns::color( 'contrast' );
+$light    = Patterns::color( 'base' );
+$lead     = Patterns::font_size( 'large' );
+$small    = Patterns::font_size( 'small' );
+// Three across, fewer on narrow screens.
+$grid     = array(
+	'type'               => 'grid',
+	'columnCount'        => 3,
+	'minimumColumnWidth' => '16rem',
+);
+$card     = static function ( $title, $text, $buttons ) use ( $section, $h, $p, $links, $soft ) {
+	return $section(
+		array( $h( $title, 3 ), $p( $text ), $links( $buttons ) ),
+		array(
+			'background' => $soft,
+			'radius'     => '12px',
+			'padding'    => array(
+				'top'    => '40',
+				'right'  => '40',
+				'bottom' => '40',
+				'left'   => '40',
+			),
+		)
+	);
+};
+$modals   = admin_url( 'edit.php?post_type=' . PostType::NAME );
+$settings = admin_url( 'edit.php?post_type=' . PostType::NAME . '&page=' . \ModalKit\Admin\SettingsPage::SLUG );
+
+// The hero's modal: opened only by its button.
+list( $welcome, $welcome_edited ) = $upsert(
+	array(
+		'post_type'    => PostType::NAME,
+		'post_status'  => 'publish',
+		'post_title'   => 'Welcome',
+		'post_name'    => 'demo-welcome',
+		'post_content' => Patterns::modal(
+			array( 'size' => 's' ),
+			array(
+				Patterns::heading( 'Hello from Modal Kit' ),
+				Patterns::paragraph( 'This modal is a heading, a paragraph and a button: core blocks inside one Modal block. Close it with the button, the × or Esc, or click outside it.' ),
+				Patterns::buttons(
+					array(
+						array(
+							'text'   => 'Close',
+							'action' => 'close',
+						),
+					)
+				),
+			)
+		),
+	)
 );
 
-foreach ( $listing as $group => $lines ) {
-	$blocks[] = $h( $group );
-	$blocks[] = $items( $lines );
+if ( ! $welcome_edited ) {
+	$rules                      = Meta::merge_defaults( array(), $defaults );
+	$rules['showOn']['mode']    = 'include';
+	$rules['showOn']['include'] = array( 'post:' . $index );
+	update_post_meta( $welcome, '_modal_kit_triggers', array() );
+	update_post_meta( $welcome, '_modal_kit_rules', $rules );
+	update_post_meta( $welcome, '_modal_kit_overrides', array() );
 }
+
+$hero = $section(
+	array(
+		'<!-- wp:columns {"verticalAlignment":"center"} --><div class="wp-block-columns are-vertically-aligned-center">'
+		. '<!-- wp:column {"verticalAlignment":"center","width":"58%"} --><div class="wp-block-column is-vertically-aligned-center" style="flex-basis:58%">'
+		. Patterns::paragraph( $pro ? 'Modal Kit and Modal Kit Pro demo' : 'Modal Kit demo', array( 'eyebrow' => true ) )
+		. '<!-- wp:heading {"level":1} --><h1 class="wp-block-heading">Modals made of blocks.</h1><!-- /wp:heading -->'
+		. Patterns::paragraph( 'Popups, slide-ins, bars, drawers and full-screen takeovers, built in the block editor from the blocks you already use. This is a real WordPress site with Modal Kit installed: every modal on it opens on its real trigger.', array( 'fontSize' => $lead ) )
+		. $p( 'You’re signed in as admin, so you can change anything. Open <a href="' . esc_url( $modals ) . '">Modal Kit → Modals</a> to edit a demo, or reload the page to start over.' )
+		. $links(
+			array(
+				array( 'Open a modal', '#modal-demo-welcome' ),
+				array( 'Browse the demos', '#demos', true ),
+			)
+		)
+		. '</div><!-- /wp:column -->'
+		. '<!-- wp:column {"verticalAlignment":"center","width":"42%"} --><div class="wp-block-column is-vertically-aligned-center" style="flex-basis:42%">'
+		. $section(
+			array(
+				Patterns::paragraph( 'Members only', array( 'eyebrow' => true ) ),
+				Patterns::heading( 'Get 10% off your first order', array( 'level' => 3 ) ),
+				Patterns::paragraph( 'This card is the kind of thing that goes inside a modal: a heading, a paragraph and buttons, styled by your theme.' ),
+				Patterns::buttons(
+					array(
+						array( 'text' => 'Claim the code' ),
+						array(
+							'text'    => 'No thanks',
+							'outline' => true,
+						),
+					)
+				),
+			),
+			array(
+				'background' => $light,
+				'text'       => $dark,
+				'radius'     => '16px',
+				'padding'    => array(
+					'top'    => '50',
+					'right'  => '50',
+					'bottom' => '50',
+					'left'   => '50',
+				),
+			)
+		)
+		. '</div><!-- /wp:column --></div><!-- /wp:columns -->',
+	),
+	array(
+		'align'      => 'full',
+		'background' => $soft,
+		'padding'    => array(
+			'top'    => '80',
+			'right'  => '50',
+			'bottom' => '80',
+			'left'   => '50',
+		),
+		'layout'     => array(
+			'type'        => 'constrained',
+			'contentSize' => '1200px',
+		),
+	)
+);
+
+$start = $section(
+	array(
+		$h( 'Start here' ),
+		$p( 'Three ways into the demo.' ),
+		$section(
+			array(
+				$card( 'All at once', count( $steps ) . ' modals in different layouts on one page: a bar, corner notes, a split modal, a drawer and a full-screen one, each on its own trigger.', array( array( 'See them all', get_permalink( $together ) ) ) ),
+				$card( 'Edit a demo', 'Every demo is an ordinary modal under Modal Kit → Modals. Change its blocks, its trigger or where it shows, then view its page again.', array( array( 'Open Modal Kit', $modals ) ) ),
+				$card( 'Make your own', 'Start from a blank modal or a starter, add the blocks you want, and pick when it opens. Publish, and it’s live on this site.', array( array( 'Add a modal', admin_url( 'post-new.php?post_type=' . PostType::NAME ) ) ) ),
+			),
+			array( 'layout' => $grid )
+		),
+	),
+	array(
+		'align'   => 'full',
+		'padding' => array(
+			'top'    => '70',
+			'right'  => '50',
+			'bottom' => '70',
+			'left'   => '50',
+		),
+		'layout'  => array(
+			'type'        => 'constrained',
+			'contentSize' => '1200px',
+		),
+	)
+);
+
+$about = $section(
+	array(
+		$h( $every_time ? 'Every modal opens, every time' : 'How often modals open' ),
+		$p(
+			$every_time
+				? 'A fresh install opens at most one modal automatically per page, waits 20 seconds before the next, and remembers which modals a visitor has seen, so nobody is shown the same one over and over. This demo turns all three off, so you can go from demo to demo and see each modal open. Change them back under <a href="' . esc_url( $settings ) . '">Modal Kit → Settings → General</a>.'
+				: 'On this site, ' . esc_html( $site_limits ) . ', and modals remember what each visitor has seen. Each demo page has a Reload the demo button that forgets it. Change these under <a href="' . esc_url( $settings ) . '">Modal Kit → Settings → General</a>.'
+		),
+		$p( 'Opening, showing and closing a modal never asks WordPress for anything, so modals work on cached and static sites too. What a visitor has seen stays in their browser, never in a cookie.' ),
+	),
+	array(
+		'align'      => 'full',
+		'background' => $dark,
+		'text'       => $light,
+		'link'       => $light,
+		'padding'    => array(
+			'top'    => '70',
+			'right'  => '50',
+			'bottom' => '70',
+			'left'   => '50',
+		),
+	)
+);
+
+ksort( $listing );
+$catalogue = array(
+	$h( 'Every demo' ),
+	$p( ( $pro ? 'Every Modal Kit starter and Pro feature' : 'Every Modal Kit starter' ) . ', each on a page of its own that explains when it opens.' ),
+);
+
+$cards = array();
+foreach ( $listing as $group => $entries ) {
+	foreach ( $entries as $entry ) {
+		$cards[] = $section(
+			array(
+				'' !== $group ? Patterns::paragraph( $group, array( 'eyebrow' => true, 'fontSize' => $small ) ) : '',
+				'<!-- wp:heading {"level":3} --><h3 class="wp-block-heading"><a href="' . esc_url( $entry['url'] ) . '">' . esc_html( $entry['title'] ) . '</a></h3><!-- /wp:heading -->',
+				$entry['description'] ? Patterns::paragraph( $entry['description'] ) : '',
+			),
+			array(
+				'background' => $soft,
+				'radius'     => '12px',
+				'padding'    => array(
+					'top'    => '40',
+					'right'  => '40',
+					'bottom' => '40',
+					'left'   => '40',
+				),
+			)
+		);
+	}
+}
+$catalogue[] = $section( $cards, array( 'layout' => $grid ) );
+
+$catalogue = $section(
+	$catalogue,
+	array(
+		'anchor'  => 'demos',
+		'align'   => 'full',
+		'padding' => array(
+			'top'    => '70',
+			'right'  => '50',
+			'bottom' => '70',
+			'left'   => '50',
+		),
+		'layout'  => array(
+			'type'        => 'constrained',
+			'contentSize' => '1200px',
+		),
+	)
+);
+
+$closing = $section(
+	array(
+		Patterns::heading( 'Like what you see?', array( 'textAlign' => 'center' ) ),
+		Patterns::paragraph( 'Modal Kit is free. Pro adds multi-step modals, forms that send to your email service, games, and more starters.', array( 'align' => 'center' ) ),
+		str_replace( '<!-- wp:buttons -->', '<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->', $links(
+			array(
+				array( 'Get Modal Kit', 'https://modalkitwp.com/' ),
+				array( 'See Pro', 'https://modalkitwp.com/pro/', true ),
+			)
+		) ),
+	),
+	array(
+		'align'      => 'full',
+		'background' => $soft,
+		'padding'    => array(
+			'top'    => '70',
+			'right'  => '50',
+			'bottom' => '70',
+			'left'   => '50',
+		),
+	)
+);
 
 wp_update_post(
 	array(
 		'ID'           => $index,
-		'post_content' => implode( "\n\n", $blocks ),
+		'post_content' => implode( "\n\n", array( $hero, $start, $about, $catalogue, $closing ) ),
 	)
 );
+
+// The welcome page carries its own heading, so it has no title above it
+// where the theme offers that template.
+if ( isset( wp_get_theme()->get_page_templates()['page-no-title'] ) ) {
+	update_post_meta( $index, '_wp_page_template', 'page-no-title' );
+}
 
 $removed = 0;
 
