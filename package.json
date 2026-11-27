@@ -1,12 +1,12 @@
 {
 	"name": "modal-kit",
-	"version": "0.1.0-preview-1",
+	"version": "1.0.0",
 	"requires": "6.8",
 	"requires_php": "7.4",
 	"tested_up_to": "7.1",
 	"private": true,
 	"description": "Modals made of blocks.",
-	"author": "Sébastien Dumont",
+	"author": "CoCart Headless, LLC",
 	"license": "GPL-2.0-or-later",
 	"engines": {
 		"node": ">=20"
@@ -49,8 +49,8 @@
 		"plugin-zip": "wp-scripts plugin-zip && node bin/release-zip.mjs",
 		"version": "node bin/version.mjs",
 		"zip": "npm run version && npm run build && npm run i18n:pot && npm run plugin-zip",
-		"wporg:screenshots": "node bin/wporg-screenshots.cjs",
-		"wporg:blueprint": "node bin/blueprint.mjs",
+		"screenshots": "node bin/screenshots.cjs",
+		"blueprint": "node bin/blueprint.mjs",
 		"i18n:pot": "node bin/env.mjs wp i18n make-pot . languages/modal-kit.pot --slug=modal-kit --domain=modal-kit --exclude=node_modules,vendor,src,tests,bin,artifacts"
 	},
 	"dependencies": {

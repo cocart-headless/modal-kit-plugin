@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Modal Kit demos
  * Description: Lifts the automatic-open limit and the cool-down (Settings → General) on demo pages marked for it. Installed on the local dev site by `npm run demos`.
- * Author: Sébastien Dumont
+ * Author: CoCart Headless, LLC
  *
  * @package ModalKit
  */

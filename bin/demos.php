@@ -1,14 +1,15 @@
 <?php
 /**
- * Demo content for the local dev site: every starter (free and Pro) and
- * the Pro features without a starter of their own, each as a published modal
- * with real conditions on a page of its own that explains it, under "Modal
- * Kit demos".
+ * Demo content: every starter (free, and Pro when it's active) and the Pro
+ * features without a starter of their own, each as a published modal with
+ * real conditions on a page of its own that explains it, under "Modal Kit
+ * demos".
  *
- * Run with `npm run demos` (WP-CLI `eval-file` on the dev site). Running it
- * again updates the demos in place (same IDs), keeps any demo modal edited by
- * hand since the last run, and removes demos no longer in the list. It
- * refuses to run anywhere but a local site.
+ * Run on the local dev site with `npm run demos` (WP-CLI `eval-file`), or in
+ * the Playground demo, where `npm run blueprint` embeds it with
+ * MODAL_KIT_DEMO_SITE defined. Running it again updates the demos in place
+ * (same IDs), keeps any demo modal edited by hand since the last run, and
+ * removes demos no longer in the list. Anywhere else it refuses to run.
  *
  * @package ModalKit
  */
@@ -22,12 +23,26 @@ use ModalKit\PostType;
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! in_array( wp_parse_url( home_url(), PHP_URL_HOST ), array( 'localhost', '127.0.0.1' ), true ) ) {
-	WP_CLI::error( 'Demos are for the local dev site only.' );
+/**
+ * Reports progress through WP-CLI, or stops with an exception outside it.
+ *
+ * @param string $message Message.
+ * @param string $type    log, success or error.
+ */
+$say = static function ( $message, $type = 'log' ) {
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::$type( $message );
+	} elseif ( 'error' === $type ) {
+		throw new RuntimeException( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Not shown on a page.
+	}
+};
+
+if ( ! defined( 'MODAL_KIT_DEMO_SITE' ) && ! in_array( wp_parse_url( home_url(), PHP_URL_HOST ), array( 'localhost', '127.0.0.1' ), true ) ) {
+	$say( 'Demos are for the local dev site and the Playground demo only.', 'error' );
 }
 
 if ( ! class_exists( Patterns::class ) ) {
-	WP_CLI::error( 'Modal Kit must be active.' );
+	$say( 'Modal Kit must be active.', 'error' );
 }
 
 $pro = class_exists( '\ModalKit\Pro\Plugin' );
@@ -202,7 +217,7 @@ if ( $woo ) {
 		$kept[ $id ] = true;
 	}
 
-	WP_CLI::log( 'WooCommerce: demo products, sample reviews and coupons ready.' );
+	$say( 'WooCommerce: demo products, sample reviews and coupons ready.' );
 }
 
 /* Conditions for starters that don't bring their own ----------------------- */
@@ -344,7 +359,8 @@ foreach ( WP_Block_Patterns_Registry::get_instance()->get_all_registered() as $p
 		'slug'        => $short,
 		'title'       => $pattern['title'],
 		'description' => isset( $pattern['description'] ) ? $pattern['description'] : '',
-		'group'       => ( 0 === strpos( $pattern['name'], 'modal-kit-pro/' ) ? 'Pro · ' : 'Free · ' ) . $group,
+		// Free and Pro side by side only when Pro is there too.
+		'group'       => ( $pro ? ( 0 === strpos( $pattern['name'], 'modal-kit-pro/' ) ? 'Pro · ' : 'Free · ' ) : '' ) . $group,
 		'content'     => $pattern['content'],
 		'settings'    => isset( $settings[ $pattern['name'] ] ) ? $settings[ $pattern['name'] ] : ( isset( $conditions[ $pattern['name'] ] ) ? $conditions[ $pattern['name'] ] : array( 'triggers' => $load( 3 ) ) ),
 		'store'       => in_array( $short, $store_starters, true ),
@@ -548,7 +564,7 @@ foreach ( $demos as $demo ) {
 			)
 		);
 		if ( $edited ) {
-			WP_CLI::log( sprintf( 'Kept "%s": edited since the last run.', $demo['title'] ) );
+			$say( sprintf( 'Kept "%s": edited since the last run.', $demo['title'] ) );
 		} else {
 			update_post_meta( $modal, '_modal_kit_triggers', $triggers );
 			update_post_meta( $modal, '_modal_kit_rules', $rules );
@@ -689,7 +705,9 @@ foreach ( $demos as $demo ) {
 // (split, drawer, full screen) skips a trigger while another one is open.
 $by_slug = array_column( $demos, null, 'slug' );
 $lineup  = array(
-	array( 'countdown-bar', 'Countdown bar', 'top', $load( 0 ), 'A bar along the top, as soon as the page loads.' ),
+	$pro
+		? array( 'countdown-bar', 'Countdown bar', 'top', $load( 0 ), 'A bar along the top, as soon as the page loads.' )
+		: array( 'shipping-notice', 'Shipping notice', 'top', $load( 0 ), 'A bar along the top, as soon as the page loads.' ),
 	array( 'order-feedback', 'Order feedback', 'bottom-right', $load( 2 ), 'A corner note, bottom right, after 2 seconds.' ),
 	array( 'discount-code', 'Discount code', '', $load( 6 ), 'A split modal after 6 seconds. The bar and the corner stay.' ),
 	array( 'event-announcement', 'Event announcement', 'right', $scroll( 30 ), 'A drawer from the right when you scroll to 30%.' ),
@@ -758,7 +776,7 @@ $blocks = array(
 	$h( 'Try it', 3 ),
 	$items(
 		array(
-			'Wait on the page: the bar, the corner note, then the split modal open on their own.',
+			$pro ? 'Wait on the page: the bar, the corner note, then the split modal open on their own.' : 'Wait on the page: the bar, then the split modal open on their own.',
 			'Close the split modal, then scroll down slowly for the drawer and the second corner.',
 			'Move the pointer up out of the window for the full-screen one.',
 			'Bars and corners don’t block the page, so they stay open alongside the others. Automatic triggers don’t queue: while a modal that blocks the page is open, any trigger that fires is skipped, so close each one before moving on.',
@@ -782,16 +800,19 @@ wp_update_post(
 	)
 );
 
-// The page's limits are lifted by a small must-use plugin on this site.
-wp_mkdir_p( WPMU_PLUGIN_DIR );
-copy( __DIR__ . '/demos-mu-plugin.php', WPMU_PLUGIN_DIR . '/modal-kit-demos.php' );
+// The page's limits are lifted by a small must-use plugin on this site. The
+// Playground demo's blueprint writes it itself.
+if ( file_exists( __DIR__ . '/demos-mu-plugin.php' ) ) {
+	wp_mkdir_p( WPMU_PLUGIN_DIR );
+	copy( __DIR__ . '/demos-mu-plugin.php', WPMU_PLUGIN_DIR . '/modal-kit-demos.php' );
+}
 
 /* The index ---------------------------------------------------------------- */
 
 ksort( $listing );
 $blocks = array(
-	$p( 'Every Modal Kit starter and Pro feature, each with real conditions on a page of its own. Each page explains when its modal opens and has a Reload the demo button.' ),
-	$p( '<strong><a href="' . esc_url( get_permalink( $together ) ) . '">All at once</a></strong>: six modals on one page (bar, corners, split, drawer and full screen) with no auto-open limit or cool-down.' ),
+	$p( ( $pro ? 'Every Modal Kit starter and Pro feature' : 'Every Modal Kit starter' ) . ', each with real conditions on a page of its own. Each page explains when its modal opens and has a Reload the demo button.' ),
+	$p( '<strong><a href="' . esc_url( get_permalink( $together ) ) . '">All at once</a></strong>: ' . count( $steps ) . ' modals in different layouts on one page, with no auto-open limit or cool-down.' ),
 );
 
 foreach ( $listing as $group => $lines ) {
@@ -816,11 +837,11 @@ foreach ( $existing as $existing_post ) {
 }
 
 if ( $removed ) {
-	WP_CLI::log( sprintf( 'Removed %d demo posts that are no longer in the list.', $removed ) );
+	$say( sprintf( 'Removed %d demo posts that are no longer in the list.', $removed ) );
 }
 
 if ( $pro ) {
 	\ModalKit\Pro\Audience::refresh_geo_flag();
 }
 
-WP_CLI::success( sprintf( '%d demos under %s', count( $demos ), get_permalink( $index ) ) );
+$say( sprintf( '%d demos under %s', count( $demos ), get_permalink( $index ) ), 'success' );

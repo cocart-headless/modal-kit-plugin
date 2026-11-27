@@ -49,7 +49,7 @@ final class Updater {
 	 * Hex Ed25519 public key that every update package must be signed with.
 	 * A package whose signature doesn't match isn't installed.
 	 */
-	const PUBLIC_KEY = 'b08c1c415329f8ffa0f866cce83915392177d93c5034a2186c905d261ca13ee8';
+	const PUBLIC_KEY = 'e4d29f1b2deaaee9ea71e0c8df621ff18efe948c998dbd5243de61c7e2d2e498';
 
 	/**
 	 * Release channels, most stable first.
@@ -1116,7 +1116,7 @@ final class Updater {
 		$details->name          = $this->name;
 		$details->slug          = $this->slug;
 		$details->version       = (string) $info->version;
-		$details->author        = '<a href="https://modalkitwp.com/">Sébastien Dumont</a>';
+		$details->author        = '<a href="https://modalkitwp.com/">CoCart Headless, LLC</a>';
 		$details->homepage      = $this->homepage;
 		$details->requires      = (string) ( $info->requires ?? '' );
 		$details->requires_php  = (string) ( $info->requires_php ?? '' );

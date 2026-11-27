@@ -174,7 +174,7 @@ final class SettingsPage {
 				Plugin::url( 'build/blocks/modal/style-index.css' ),
 				Plugin::url( 'assets/fonts/fonts.css' ),
 			),
-			'accountUrl'   => 'https://github.com/seb86/modal-kit-plugin',
+			'accountUrl'   => 'https://polar.sh/cocartheadless/portal/request',
 			'isProActive'  => defined( 'MODAL_KIT_PRO_VERSION' ),
 			'wizardUrl'    => Wizard::url(),
 			'styles'       => Styles::for_js(),

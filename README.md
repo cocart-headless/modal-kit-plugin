@@ -4,7 +4,7 @@
 	</a>
 	<img src="https://img.shields.io/badge/WordPress-6.8+-blue.svg" alt="WordPress 6.8+">
 	<img src="https://img.shields.io/badge/PHP-7.4+-777BB4.svg" alt="PHP 7.4+">
-	<img src="https://img.shields.io/badge/status-beta-orange.svg" alt="Status: beta">
+	<img src="https://img.shields.io/badge/version-1.0.0-brightgreen.svg" alt="Version 1.0.0">
 	<a href="https://github.com/seb86/modal-kit-plugin">
 		<img src="https://img.shields.io/github/stars/seb86/modal-kit-plugin?style=social" alt="GitHub Stars">
 	</a>
@@ -16,7 +16,7 @@
 
 Modal Kit adds one block, Modal. Everything inside it is a core block, such as Group, Heading, Image, Cover and Buttons, so there's no new builder to learn. Modals pick up your theme's colors, fonts and spacing, and the editor shows each one over your own homepage, exactly as visitors will see it.
 
-**Status:** beta. Every feature is complete and free to use, and feedback from real sites decides what comes next.
+Every feature is free to use, with nothing locked or time-limited.
 
 Requires WordPress 6.8+ and PHP 7.4+.
 
@@ -34,14 +34,15 @@ The full feature list is in [readme.txt](readme.txt).
 
 ## Installing
 
-Modal Kit isn't on WordPress.org: you download it from modalkitwp.com, and it updates from there.
+> [!NOTE]
+> Modal Kit isn't on WordPress.org: you download it from ModalKitWP.com, and it updates from there.
 
 1. Download the zip from [modalkitwp.com](https://modalkitwp.com/) (or [Releases](https://github.com/seb86/modal-kit-plugin/releases)).
 2. In WordPress, go to **Plugins → Add New Plugin → Upload Plugin**, choose the zip, then activate it.
 
 ## Updates
 
-Updates come from modalkitwp.com's package server (`packages.cocartheadless.com`) and need no license key. They show in **Dashboard → Updates** like any other plugin's. Under **Modal Kit → Settings → Updates** you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 52 weeks, or roll back to an earlier version.
+Updates come from modalkitwp.com's package server (`packages.cocartheadless.com`) and need no license key. They show in **Dashboard → Updates** like any other plugin's. Under **Modal Kit → Settings → Updates** you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 12 weeks, or roll back to an earlier version.
 
 Every update is signed, and Modal Kit refuses to install one whose signature doesn't check out. If your host blocks outgoing requests, allow `packages.cocartheadless.com`. On a network, updates are managed from the main site.
 
