@@ -87,9 +87,7 @@ const content = ( pro ) => [
 						"delete_transient( '_wc_activation_redirect' );",
 						"update_option( 'woocommerce_coming_soon', 'no' );",
 						"update_option( 'woocommerce_store_pages_only', 'no' );",
-						"update_option( 'woocommerce_onboarding_profile', array( 'skipped' => true ) );",
 						"update_option( 'woocommerce_task_list_hidden', 'yes' );",
-						"update_option( 'woocommerce_show_marketplace_suggestions', 'no' );",
 						"if ( class_exists( 'WC_Install' ) ) { WC_Install::create_pages(); }",
 						'',
 					].join( '\n' ),
@@ -99,7 +97,13 @@ const content = ( pro ) => [
 	{
 		step: 'writeFile',
 		path: '/wordpress/wp-content/mu-plugins/modal-kit-demos.php',
-		data: read( 'bin/demos-mu-plugin.php' ),
+		// The Pro demo names no company, only Modal Kit.
+		data: pro
+			? read( 'bin/demos-mu-plugin.php' ).replace(
+					/ \* Author: .*\n/,
+					''
+				)
+			: read( 'bin/demos-mu-plugin.php' ),
 	},
 	{
 		step: 'runPHP',
@@ -121,8 +125,14 @@ const content = ( pro ) => [
 					pro ? 'Modal Kit Pro demo' : 'Modal Kit demo'
 				}' );`,
 				"update_option( 'blogdescription', 'Modals made of blocks' );",
-				"update_option( 'show_on_front', 'page' );",
-				"update_option( 'page_on_front', $index );",
+				// The Pro demo's theme has a store homepage of its own; the
+				// welcome page is where visitors land instead.
+				...( pro
+					? []
+					: [
+							"update_option( 'show_on_front', 'page' );",
+							"update_option( 'page_on_front', $index );",
+						] ),
 			]
 		),
 	},
@@ -148,12 +158,12 @@ export function blueprint( pro, plugins = [] ) {
 		$schema: 'https://playground.wordpress.net/blueprint-schema.json',
 		meta: {
 			title: pro ? 'Modal Kit Pro demo' : 'Modal Kit demo',
-			author: 'CoCart Headless, LLC',
+			author: pro ? 'Modal Kit' : 'CoCart Headless, LLC',
 			description: pro
 				? 'Every Modal Kit starter and Pro feature on a page of its own, opening on its real trigger, with a WooCommerce store for the store starters.'
 				: 'Every free Modal Kit starter on a page of its own, opening on its real trigger, with an index of them all.',
 		},
-		landingPage: '/',
+		landingPage: pro ? '/modal-kit-demos/' : '/',
 		preferredVersions: { php: '8.3', wp: 'latest' },
 		features: { networking: true },
 		login: true,
@@ -172,9 +182,52 @@ export function blueprint( pro, plugins = [] ) {
 					]
 				: [] ),
 			...plugins.map( install ),
+			...( pro ? store() : [] ),
 			...content( pro ),
 		],
 	};
+}
+
+/**
+ * The Pro demo's store: a US shop that takes test payments, in the Purple
+ * theme. Before the demo content, so its pages and modals use Purple's
+ * palette.
+ *
+ * @return {Object[]} Blueprint steps.
+ */
+function store() {
+	return [
+		{
+			step: 'installTheme',
+			themeData: { resource: 'wordpress.org/themes', slug: 'purple' },
+			options: { activate: true },
+		},
+		{
+			step: 'setSiteOptions',
+			options: {
+				blog_public: 0,
+				woocommerce_store_city: 'Los Angeles',
+				woocommerce_store_address: '123 Main St',
+				woocommerce_store_postcode: '90038',
+				woocommerce_default_country: 'US:CA',
+				woocommerce_onboarding_profile: { skipped: true },
+				woocommerce_currency: 'USD',
+				woocommerce_weight_unit: 'lbs',
+				woocommerce_dimension_unit: 'in',
+				woocommerce_allow_tracking: 'no',
+				woocommerce_enable_coupons: 'yes',
+				woocommerce_calc_discounts_sequentially: 'no',
+				woocommerce_ship_to_countries: 'specific',
+				woocommerce_specific_ship_to_countries: [ 'US' ],
+				woocommerce_cheque_settings: { enabled: 'yes' },
+				woocommerce_bacs_settings: { enabled: 'yes' },
+				woocommerce_cod_settings: { enabled: 'yes' },
+				woocommerce_newly_installed: 'no',
+				woocommerce_custom_orders_table_enabled: 'yes',
+				woocommerce_show_marketplace_suggestions: 'no',
+			},
+		},
+	];
 }
 
 const write = ( file, data ) => {
