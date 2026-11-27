@@ -810,6 +810,99 @@ wp_update_post(
 	)
 );
 
+/* Styles: one offer in every style, each opened by its own button ----------- */
+
+// The block's own styles, then the fixed ones the plugin ships. Styles a
+// site makes itself (Pro's style editor) stay out of the demo.
+$style_list = array(
+	''          => 'Native',
+	'soft'      => 'Soft',
+	'editorial' => 'Editorial',
+);
+foreach ( \ModalKit\Styles::all() as $style_slug => $style ) {
+	if ( ! empty( $style['builtin'] ) ) {
+		$style_list[ $style_slug ] = $style['label'];
+	}
+}
+$style_notes = array(
+	''          => 'Your theme’s own colours, fonts and buttons. The default, so a modal looks like the rest of the site.',
+	'soft'      => 'The theme’s colours with rounder corners, a softer shadow and more room.',
+	'editorial' => 'Larger type and a quieter frame, for announcements that read like a page.',
+);
+
+list( $styles_page ) = $upsert(
+	array(
+		'post_type'   => 'page',
+		'post_status' => 'publish',
+		'post_title'  => 'Styles',
+		'post_name'   => 'styles',
+		'post_parent' => $index,
+		'menu_order'  => 0,
+	)
+);
+
+$style_cards = array();
+
+foreach ( $style_list as $style_slug => $style_label ) {
+	$key = '' === $style_slug ? 'native' : $style_slug;
+
+	list( $modal, $edited ) = $upsert(
+		array(
+			'post_type'    => PostType::NAME,
+			'post_status'  => 'publish',
+			'post_title'   => $style_label . ' (styles)',
+			'post_name'    => 'demo-style-' . $key,
+			'post_content' => Patterns::modal(
+				array_filter( array( 'className' => '' === $style_slug ? '' : 'is-style-' . $style_slug ) ),
+				array(
+					Patterns::paragraph( $style_label . ' style', array( 'eyebrow' => true ) ),
+					Patterns::heading( 'Get 10% off your first order' ),
+					Patterns::paragraph( 'Join the list for early access to new notebooks, and a code for your first order.' ),
+					Patterns::buttons(
+						array(
+							array( 'text' => 'Claim the code' ),
+							array(
+								'text'    => 'No thanks',
+								'outline' => true,
+								'action'  => 'close',
+							),
+						)
+					),
+				)
+			),
+		)
+	);
+
+	if ( ! $edited ) {
+		$rules                      = Meta::merge_defaults( array(), $defaults );
+		$rules['showOn']['mode']    = 'include';
+		$rules['showOn']['include'] = array( 'post:' . $styles_page );
+		update_post_meta( $modal, '_modal_kit_triggers', array() );
+		update_post_meta( $modal, '_modal_kit_rules', $rules );
+		update_post_meta( $modal, '_modal_kit_overrides', array() );
+	}
+
+	$style_cards[] = '<!-- wp:group {"style":{"border":{"width":"1px","radius":"12px"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group" style="border-width:1px;border-radius:12px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">'
+		. $h( $style_label, 3 )
+		. $p( esc_html( isset( $style_notes[ $style_slug ] ) ? $style_notes[ $style_slug ] : ( isset( \ModalKit\Styles::all()[ $style_slug ]['description'] ) ? \ModalKit\Styles::all()[ $style_slug ]['description'] : 'A fixed look that stays the same on any theme.' ) ) )
+		. '<!-- wp:html --><div class="wp-block-buttons is-layout-flex" style="display:flex;flex-wrap:wrap;gap:12px"><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#modal-demo-style-' . esc_attr( $key ) . '">Open ' . esc_html( $style_label ) . '</a></div></div><!-- /wp:html -->'
+		. '</div><!-- /wp:group -->';
+}
+
+wp_update_post(
+	array(
+		'ID'           => $styles_page,
+		'post_content' => implode(
+			"\n\n",
+			array(
+				$p( 'The same offer in every style Modal Kit ships with. Native follows your theme, Soft and Editorial adjust it, and the fixed styles look the same on any theme. Pick one in the editor’s Style panel, for any modal.' ),
+				'<!-- wp:group {"layout":{"type":"grid","columnCount":3,"minimumColumnWidth":"16rem"}} --><div class="wp-block-group">' . implode( '', $style_cards ) . '</div><!-- /wp:group -->',
+				$p( '<a href="' . esc_url( get_permalink( $index ) ) . '">← All demos</a>' ),
+			)
+		),
+	)
+);
+
 // The page's limits are lifted by a small must-use plugin on this site. The
 // Playground demo's blueprint writes it itself.
 if ( file_exists( __DIR__ . '/demos-mu-plugin.php' ) ) {
@@ -1023,14 +1116,15 @@ $hero = $section(
 $start = $section(
 	array(
 		$h( 'Start here' ),
-		$p( 'Three ways into the demo.' ),
+		$p( 'Four ways into the demo.' ),
 		$section(
 			array(
+				$card( 'Styles', 'One offer in each of the ' . count( $style_list ) . ' styles a modal can take, from your theme’s own look to fixed designs that look the same anywhere.', array( array( 'Compare the styles', get_permalink( $styles_page ) ) ) ),
 				$card( 'All at once', count( $steps ) . ' modals in different layouts on one page: a bar, corner notes, a split modal, a drawer and a full-screen one, each on its own trigger.', array( array( 'See them all', get_permalink( $together ) ) ) ),
 				$card( 'Edit a demo', 'Every demo is an ordinary modal under Modal Kit → Modals. Change its blocks, its trigger or where it shows, then view its page again.', array( array( 'Open Modal Kit', $modals ) ) ),
 				$card( 'Make your own', 'Start from a blank modal or a starter, add the blocks you want, and pick when it opens. Publish, and it’s live on this site.', array( array( 'Add a modal', admin_url( 'post-new.php?post_type=' . PostType::NAME ) ) ) ),
 			),
-			array( 'layout' => $grid )
+			array( 'layout' => array_merge( $grid, array( 'columnCount' => 2 ) ) )
 		),
 	),
 	array(
@@ -1123,13 +1217,27 @@ $catalogue = $section(
 $closing = $section(
 	array(
 		Patterns::heading( 'Like what you see?', array( 'textAlign' => 'center' ) ),
-		Patterns::paragraph( 'Modal Kit is free. Pro adds multi-step modals, forms that send to your email service, games, and more starters.', array( 'align' => 'center' ) ),
-		str_replace( '<!-- wp:buttons -->', '<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->', $links(
-			array(
-				array( 'Get Modal Kit', 'https://modalkitwp.com/' ),
-				array( 'See Pro', 'https://modalkitwp.com/pro/', true ),
+		Patterns::paragraph(
+			$pro
+				? 'Everything on this site is Modal Kit Pro, on top of the free Modal Kit. A Pro licence brings updates and support.'
+				: 'Modal Kit is free. Pro adds multi-step modals, forms that send to your email service, games, and more starters.',
+			array( 'align' => 'center' )
+		),
+		str_replace(
+			'<!-- wp:buttons -->',
+			'<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->',
+			$links(
+				$pro
+					? array(
+						array( 'See pricing', 'https://modalkitwp.com/pricing/' ),
+						array( 'Compare Free and Pro', 'https://modalkitwp.com/free-vs-pro/', true ),
+					)
+					: array(
+						array( 'Get Modal Kit', 'https://modalkitwp.com/' ),
+						array( 'See Pro', 'https://modalkitwp.com/pro/', true ),
+					)
 			)
-		) ),
+		),
 	),
 	array(
 		'align'      => 'full',
