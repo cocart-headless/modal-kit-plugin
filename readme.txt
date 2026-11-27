@@ -70,7 +70,7 @@ Embeds you add with the Embed block also use WordPress's own oEmbed lookups, as 
 
 == Source code ==
 
-The JavaScript and CSS in `build/` are compiled with @wordpress/scripts from the human-readable source in `src/`, which comes with the plugin. The build configuration and development tools are in the plugin's repository: https://github.com/seb86/modal-kit-plugin
+The JavaScript and CSS in `build/` are compiled with @wordpress/scripts from the human-readable source in `src/`, which comes with the plugin. The build configuration and development tools are in the plugin's repository: https://github.com/cocart-headless/modal-kit-plugin
 
 == Credits ==
 
