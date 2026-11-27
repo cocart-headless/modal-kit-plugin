@@ -6,7 +6,7 @@
 	"tested_up_to": "7.1",
 	"private": true,
 	"description": "Modals made of blocks.",
-	"author": "Sébastien Dumont",
+	"author": "CoCart Headless, LLC",
 	"license": "GPL-2.0-or-later",
 	"engines": {
 		"node": ">=20"

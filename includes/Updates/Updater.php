@@ -1116,7 +1116,7 @@ final class Updater {
 		$details->name          = $this->name;
 		$details->slug          = $this->slug;
 		$details->version       = (string) $info->version;
-		$details->author        = '<a href="https://modalkitwp.com/">Sébastien Dumont</a>';
+		$details->author        = '<a href="https://modalkitwp.com/">CoCart Headless, LLC</a>';
 		$details->homepage      = $this->homepage;
 		$details->requires      = (string) ( $info->requires ?? '' );
 		$details->requires_php  = (string) ( $info->requires_php ?? '' );

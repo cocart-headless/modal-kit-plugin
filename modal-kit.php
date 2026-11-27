@@ -6,7 +6,8 @@
  * Version:           0.1.0-preview-1
  * Requires at least: 6.8
  * Requires PHP:      7.4
- * Author:            Sébastien Dumont
+ * Author:            CoCart Headless, LLC
+ * Author URI:        https://modalkitwp.com/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       modal-kit
