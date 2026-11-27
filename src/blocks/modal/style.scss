@@ -776,7 +776,9 @@ dialog.modal-kit:not([open]) {
 // Native is the default. The fixed styles are in styles/.
 .modal-kit__panel.is-style-soft {
 	--mk-radius-panel: max(1rem, calc(var(--modal-kit-radius, 0px) * 2));
-	padding: calc(var(--mk-panel-padding, 1.5rem) * 1.25);
+	// The token, not `padding`, so each layout keeps its own spacing, such as
+	// the room for the close button.
+	--mk-panel-padding: calc(var(--modal-kit-space, 1.5rem) * 1.25);
 }
 
 .modal-kit__panel.is-style-editorial {
@@ -793,6 +795,20 @@ dialog.modal-kit:not([open]) {
 
 	:where(h1, h2) {
 		font-size: var(--wp--preset--font-size--xx-large, clamp(2rem, 5cqi, 3.5rem));
+	}
+
+	// The panel's colours are swapped, so a theme's own heading and outline
+	// button colours, set for a light page, would be dark on dark.
+	:where(h1, h2, h3, h4, h5, h6) {
+		color: inherit;
+	}
+
+	.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color) {
+		color: inherit;
+	}
+
+	.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-border-color) {
+		border-color: currentcolor;
 	}
 }
 
