@@ -1,6 +1,6 @@
 {
 	"name": "modal-kit",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"requires": "6.8",
 	"requires_php": "7.4",
 	"tested_up_to": "7.1",
@@ -13,6 +13,7 @@
 	},
 	"files": [
 		"modal-kit.php",
+		"CHANGELOG.md",
 		"uninstall.php",
 		"readme.txt",
 		"includes",

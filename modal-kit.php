@@ -3,7 +3,7 @@
  * Plugin Name:       Modal Kit
  * Plugin URI:        https://modalkitwp.com/
  * Description:       Modals made of blocks: popups, slide-ins, bars, drawers, full-screen takeovers, bottom sheets and inline panels, built with core blocks.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.8
  * Requires PHP:      7.4
  * Author:            CoCart Headless, LLC
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MODAL_KIT_VERSION', '1.0.0' );
+define( 'MODAL_KIT_VERSION', '1.0.1' );
 define( 'MODAL_KIT_FILE', __FILE__ );
 define( 'MODAL_KIT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MODAL_KIT_URL', plugin_dir_url( __FILE__ ) );
