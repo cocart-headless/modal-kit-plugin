@@ -141,10 +141,12 @@ async function openPanel( sidebar, name ) {
 }
 
 async function closePanels( sidebar ) {
-	for ( const button of await sidebar
-		.locator( '.components-panel__body-toggle[aria-expanded="true"]' )
-		.all() ) {
-		await button.click();
+	// One at a time: closing a panel changes which are open.
+	const open = sidebar.locator(
+		'.components-panel__body-toggle[aria-expanded="true"]'
+	);
+	for ( let i = 0; i < 20 && ( await open.count() ); i++ ) {
+		await open.first().click();
 	}
 }
 
@@ -160,7 +162,11 @@ const cleanup = [];
 	}
 
 	const browser = await chromium.launch();
+	// Runs last, so the script ends even when a shot fails.
+	cleanup.push( () => browser.close() );
 	const context = await browser.newContext( { viewport: VIEW } );
+	// A step that can't find what it waits for fails instead of hanging.
+	context.setDefaultTimeout( 30000 );
 	const page = await context.newPage();
 	await page.goto( `${ BASE }/wp-login.php` );
 	await page.fill( '#user_login', 'admin' );
@@ -374,6 +380,7 @@ const cleanup = [];
 
 	// Front end, as a visitor (no admin bar).
 	const guest = await browser.newPage( { viewport: VIEW } );
+	guest.setDefaultTimeout( 30000 );
 	for ( const [ slug, , , , caption ] of MODALS ) {
 		await openFront( guest, slug );
 		await shoot( guest, `front-${ slug }`, caption );
@@ -405,7 +412,6 @@ const cleanup = [];
 	);
 	for ( const [ panel, name, caption ] of [
 		[ 'Size', 'editor-size', 'Block settings: Size.' ],
-		[ 'Overlay', 'editor-overlay', 'Block settings: Overlay.' ],
 		[ 'Animation', 'editor-animation', 'Block settings: Animation.' ],
 		[
 			'Closing',
@@ -413,8 +419,10 @@ const cleanup = [];
 			'Block settings: how the modal closes.',
 		],
 	] ) {
-		await openPanel( sidebar, panel );
-		await shoot( page, name, caption );
+		if ( await sidebar.getByRole( 'button', { name: panel } ).count() ) {
+			await openPanel( sidebar, panel );
+			await shoot( page, name, caption );
+		}
 	}
 
 	// Styles tab: the style picker.
@@ -426,6 +434,24 @@ const cleanup = [];
 		'editor-styles',
 		'Style picker: the theme’s look or a fixed style, previewed on hover.'
 	);
+	// The backdrop behind the modal is a panel of the Styles tab.
+	for ( const [ panel, name, caption ] of [
+		[
+			'Overlay',
+			'editor-overlay',
+			'Block styles: the overlay behind the modal.',
+		],
+		[
+			'Backdrop',
+			'editor-backdrop',
+			'Block styles: the backdrop behind the modal.',
+		],
+	] ) {
+		if ( await sidebar.getByRole( 'button', { name: panel } ).count() ) {
+			await openPanel( sidebar, panel );
+			await shoot( page, name, caption );
+		}
+	}
 
 	// Modal tab: triggers, display rules and accessibility.
 	sidebar = await editModal( page, created[ 'discount-code' ] );
@@ -442,7 +468,8 @@ const cleanup = [];
 		name: 'Pages',
 		exact: true,
 	} );
-	await pages.fill( 'Sample' );
+	await pages.click();
+	await pages.pressSequentially( 'Hello', { delay: 80 } );
 	await page
 		.getByRole( 'listbox' )
 		.getByRole( 'option' )
@@ -538,7 +565,11 @@ const cleanup = [];
 	await canvas.locator( 'p.wp-block-paragraph' ).first().click();
 	await page.keyboard.press( 'Control+A' );
 	await page.keyboard.press( 'Control+K' );
-	await page.keyboard.type( 'Monthly' );
+	const linkBox = page.locator(
+		'.block-editor-link-control__search-input input'
+	);
+	await linkBox.waitFor();
+	await linkBox.fill( 'Monthly' );
 	await page
 		.getByRole( 'option', { name: /Monthly letter/ } )
 		.first()
@@ -640,8 +671,6 @@ const cleanup = [];
 		}
 	}
 	await page.unroute( /settings/ );
-
-	await browser.close();
 
 	fs.writeFileSync(
 		path.join( OUT, 'README.md' ),
