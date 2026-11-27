@@ -268,12 +268,12 @@ class UpdatesTest extends WP_UnitTestCase {
 
 		remove_filter( 'pre_http_request', array( $this, 'serve' ) );
 
-		$pair    = sodium_crypto_sign_keypair();
-		$public  = bin2hex( sodium_crypto_sign_publickey( $pair ) );
-		$secret  = sodium_crypto_sign_secretkey( $pair );
-		$zip     = 'the package';
+		$pair   = sodium_crypto_sign_keypair();
+		$public = bin2hex( sodium_crypto_sign_publickey( $pair ) );
+		$secret = sodium_crypto_sign_secretkey( $pair );
+		$zip    = 'the package';
 		// Signed over the SHA-384 hash, as bin/sign-package.mjs signs.
-		$good    = base64_encode( sodium_crypto_sign_detached( hash( 'sha384', $zip, true ), $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		$good = base64_encode( sodium_crypto_sign_detached( hash( 'sha384', $zip, true ), $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 		// Signed over the whole file: not accepted.
 		$whole   = base64_encode( sodium_crypto_sign_detached( $zip, $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 		$bad     = base64_encode( sodium_crypto_sign_detached( 'something else', $secret ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
