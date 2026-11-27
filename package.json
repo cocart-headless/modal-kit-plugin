@@ -50,7 +50,7 @@
 		"version": "node bin/version.mjs",
 		"zip": "npm run version && npm run build && npm run i18n:pot && npm run plugin-zip",
 		"screenshots": "node bin/screenshots.cjs",
-		"wporg:blueprint": "node bin/blueprint.mjs",
+		"blueprint": "node bin/blueprint.mjs",
 		"i18n:pot": "node bin/env.mjs wp i18n make-pot . languages/modal-kit.pot --slug=modal-kit --domain=modal-kit --exclude=node_modules,vendor,src,tests,bin,artifacts"
 	},
 	"dependencies": {
