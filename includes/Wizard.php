@@ -174,6 +174,7 @@ final class Wizard {
 			'newUrl'      => admin_url( 'post-new.php?post_type=' . PostType::NAME ),
 			'settingsUrl' => SettingsPage::url(),
 			'proUrl'      => Upsell::PRO_URL,
+			'wooUrl'      => Upsell::SITE_URL . 'woocommerce/',
 			'showProTips' => Upsell::show_tips(),
 			'colors'      => self::colors(),
 			'styles'      => Styles::for_js(),

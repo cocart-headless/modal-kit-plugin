@@ -22,7 +22,12 @@ final class Upsell {
 	/**
 	 * Pro page on the product site.
 	 */
-	const PRO_URL = 'https://github.com/seb86/modal-kit-plugin/';
+	const PRO_URL = 'https://modalkitwp.com/pro/';
+
+	/**
+	 * Product site, where each Pro feature has its own page.
+	 */
+	const SITE_URL = 'https://modalkitwp.com/';
 
 	/**
 	 * User meta: listing key => dismissed-until timestamp.
@@ -151,7 +156,7 @@ final class Upsell {
 				'label'       => __( 'Next / previous step', 'modal-kit' ),
 				'title'       => __( 'Multi-step modals', 'modal-kit' ),
 				'description' => $multi_step,
-				'url'         => self::PRO_URL . '#multi-step',
+				'url'         => self::SITE_URL . 'multi-step/',
 			),
 			array(
 				'key'         => 'go-to-step',
@@ -159,7 +164,7 @@ final class Upsell {
 				'label'       => __( 'Go to step', 'modal-kit' ),
 				'title'       => __( 'Multi-step modals', 'modal-kit' ),
 				'description' => $multi_step,
-				'url'         => self::PRO_URL . '#multi-step',
+				'url'         => self::SITE_URL . 'multi-step/',
 			),
 			array(
 				'key'         => 'submit-form',
@@ -167,14 +172,14 @@ final class Upsell {
 				'label'       => __( 'Submit form', 'modal-kit' ),
 				'title'       => __( 'Forms', 'modal-kit' ),
 				'description' => $forms,
-				'url'         => self::PRO_URL . '#forms',
+				'url'         => self::SITE_URL . 'forms/',
 			),
 			// Pro collections in the pattern picker.
 			array(
 				'key'     => 'collections',
 				'area'    => 'picker',
-				'url'     => self::PRO_URL . '#templates',
-				'compare' => self::PRO_URL . '#compare',
+				'url'     => self::SITE_URL . 'templates/',
+				'compare' => self::SITE_URL . 'free-vs-pro/',
 				// The number of templates in each Pro collection.
 				'groups'  => array(
 					array(
@@ -243,7 +248,7 @@ final class Upsell {
 				'area'        => 'panel',
 				'title'       => __( 'Forms', 'modal-kit' ),
 				'description' => $forms,
-				'url'         => self::PRO_URL . '#forms',
+				'url'         => self::SITE_URL . 'forms/',
 			),
 			// Display rules: Pro's visit count and audience rules.
 			array(
@@ -251,7 +256,7 @@ final class Upsell {
 				'area'        => 'rules',
 				'title'       => __( 'Wait for a returning visitor', 'modal-kit' ),
 				'description' => __( 'Show it from a visitor’s 2nd, 3rd or later visit (session), or only to new visitors, by referrer, cookie or country.', 'modal-kit' ),
-				'url'         => self::PRO_URL . '#audience',
+				'url'         => self::PRO_URL . '#features',
 			),
 			// Settings → Styles: Pro's Style editor.
 			array(
@@ -259,7 +264,7 @@ final class Upsell {
 				'area'        => 'styles',
 				'title'       => __( 'Style editor', 'modal-kit' ),
 				'description' => __( 'Change a style’s colours, fonts, corners and shadow with a live preview, or start a new style from scratch.', 'modal-kit' ),
-				'url'         => self::PRO_URL . '#style-editor',
+				'url'         => self::SITE_URL . 'style-editor/',
 			),
 			// One milestone notice on the modal list.
 			array(
@@ -281,7 +286,7 @@ final class Upsell {
 					__( 'Product or category in cart', 'modal-kit' ),
 				),
 				'description' => __( 'Open this modal when the cart passes an amount, e.g. a free-shipping nudge at $30.', 'modal-kit' ),
-				'url'         => self::PRO_URL . '#woocommerce',
+				'url'         => self::SITE_URL . 'woocommerce/',
 			);
 		}
 

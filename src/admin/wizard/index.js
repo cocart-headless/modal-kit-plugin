@@ -808,7 +808,7 @@ function FirstModal( { useCases, selected, setSelected, look } ) {
 								</span>
 							</span>
 						</span>
-						<ExternalLink href={ `${ data.proUrl }#woocommerce` }>
+						<ExternalLink href={ data.wooUrl }>
 							{ __(
 								'About WooCommerce in Modal Kit Pro',
 								'modal-kit'
