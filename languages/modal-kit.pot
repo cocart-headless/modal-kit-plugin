@@ -1,15 +1,15 @@
-# Copyright (C) 2026 Sébastien Dumont
+# Copyright (C) 2026 CoCart Headless, LLC
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Modal Kit 0.1.0-preview-1\n"
+"Project-Id-Version: Modal Kit 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/modal-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-24T12:09:05+00:00\n"
+"POT-Creation-Date: 2026-11-27T05:33:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: modal-kit\n"
@@ -20,6 +20,7 @@ msgid "Modal Kit"
 msgstr ""
 
 #. Plugin URI of the plugin
+#. Author URI of the plugin
 #: modal-kit.php
 msgid "https://modalkitwp.com/"
 msgstr ""
@@ -31,7 +32,7 @@ msgstr ""
 
 #. Author of the plugin
 #: modal-kit.php
-msgid "Sébastien Dumont"
+msgid "CoCart Headless, LLC"
 msgstr ""
 
 #: build/blocks/modal/render.php:33
@@ -481,266 +482,266 @@ msgstr ""
 msgid "This isn’t a Modal Kit export file."
 msgstr ""
 
-#: includes/Updates/Updater.php:477
+#: includes/Updates/Updater.php:471
 msgid "Stable"
 msgstr ""
 
-#: includes/Updates/Updater.php:478
+#: includes/Updates/Updater.php:472
 msgid "Fully tested releases. Recommended for live sites."
 msgstr ""
 
-#: includes/Updates/Updater.php:482
+#: includes/Updates/Updater.php:476
 msgid "Release candidate"
 msgstr ""
 
-#: includes/Updates/Updater.php:483
+#: includes/Updates/Updater.php:477
 msgid "The next stable version, shortly before it is released."
 msgstr ""
 
-#: includes/Updates/Updater.php:487
+#: includes/Updates/Updater.php:481
 msgid "Beta"
 msgstr ""
 
-#: includes/Updates/Updater.php:488
+#: includes/Updates/Updater.php:482
 msgid "New features still being tested. May have bugs: best on a staging site."
 msgstr ""
 
-#: includes/Updates/Updater.php:492
+#: includes/Updates/Updater.php:486
 msgid "Nightly"
 msgstr ""
 
-#: includes/Updates/Updater.php:493
+#: includes/Updates/Updater.php:487
 msgid "The latest unreleased build. For trying changes before anyone else."
 msgstr ""
 
-#: includes/Updates/Updater.php:515
+#: includes/Updates/Updater.php:509
 msgid "Choose a release channel from the list."
 msgstr ""
 
-#: includes/Updates/Updater.php:547
+#: includes/Updates/Updater.php:541
 msgid "Updates can be paused for up to 52 weeks."
 msgstr ""
 
 #. translators: %s: plugin name.
-#: includes/Updates/Updater.php:810
+#: includes/Updates/Updater.php:806
 #, php-format
 msgid "Couldn’t get this %s package’s signature from the update server, so it wasn’t installed. Try again later."
 msgstr ""
 
 #. translators: %s: plugin name.
-#: includes/Updates/Updater.php:818
+#: includes/Updates/Updater.php:814
 #, php-format
 msgid "This %s package isn’t signed, so it wasn’t installed."
 msgstr ""
 
 #. translators: %s: plugin name.
-#: includes/Updates/Updater.php:846
+#: includes/Updates/Updater.php:842
 #, php-format
 msgid "This %s package failed its signature check, so it wasn’t installed."
 msgstr ""
 
 #. translators: %s: the public key, in base64.
-#: includes/Updates/Updater.php:854
+#: includes/Updates/Updater.php:850
 #, php-format
 msgid "Verified the package signature with the signing key %s."
 msgstr ""
 
-#: includes/Updates/Updater.php:1018
+#: includes/Updates/Updater.php:1014
 msgid "That version isn’t available to roll back to."
 msgstr ""
 
-#: includes/Updates/Updater.php:1096
+#: includes/Updates/Updater.php:1092
 msgid "Couldn’t install that version. Check the file permissions and try again."
 msgstr ""
 
 #. translators: 1: plugin name, 2: new version, 3: previous version.
-#: includes/Updates/Updater.php:1256
+#: includes/Updates/Updater.php:1252
 #, php-format
 msgid "%1$s is now on version %2$s (was %3$s)."
 msgstr ""
 
-#: includes/Updates/Updater.php:1263
+#: includes/Updates/Updater.php:1259
 msgid "What’s new"
 msgstr ""
 
-#: includes/Upsell.php:143
+#: includes/Upsell.php:148
 msgid "Make this button go to another step, so you can build offer → email → thank-you flows inside one modal."
 msgstr ""
 
-#: includes/Upsell.php:144
+#: includes/Upsell.php:149
 msgid "Collect emails right in the modal and send them to Kit, Mailchimp, HubSpot, GetResponse, Constant Contact, Keap, MailerLite, Brevo, Emma, MailPoet, FluentCRM, WPForms or a webhook."
 msgstr ""
 
-#: includes/Upsell.php:151
+#: includes/Upsell.php:156
 msgid "Next / previous step"
 msgstr ""
 
-#: includes/Upsell.php:152
-#: includes/Upsell.php:160
+#: includes/Upsell.php:157
+#: includes/Upsell.php:165
 #: build/admin/settings.js:43
 msgid "Multi-step modals"
 msgstr ""
 
-#: includes/Upsell.php:159
+#: includes/Upsell.php:164
 msgid "Go to step"
 msgstr ""
 
-#: includes/Upsell.php:167
+#: includes/Upsell.php:172
 msgid "Submit form"
 msgstr ""
 
-#: includes/Upsell.php:168
-#: includes/Upsell.php:244
+#: includes/Upsell.php:173
+#: includes/Upsell.php:249
 msgid "Forms"
 msgstr ""
 
-#: includes/Upsell.php:181
+#: includes/Upsell.php:186
 msgid "Events"
 msgstr ""
 
-#: includes/Upsell.php:185
+#: includes/Upsell.php:190
 msgid "Games"
 msgstr ""
 
-#: includes/Upsell.php:189
+#: includes/Upsell.php:194
 msgid "Popups"
 msgstr ""
 
-#: includes/Upsell.php:193
+#: includes/Upsell.php:198
 #: patterns/shipping-notice.php:32
 msgid "Shop"
 msgstr ""
 
-#: includes/Upsell.php:197
+#: includes/Upsell.php:202
 msgid "Studio"
 msgstr ""
 
-#: includes/Upsell.php:203
+#: includes/Upsell.php:208
 msgid "Welcome offer"
 msgstr ""
 
-#: includes/Upsell.php:205
+#: includes/Upsell.php:210
 msgid "Want 15% off your first order?"
 msgstr ""
 
-#: includes/Upsell.php:206
+#: includes/Upsell.php:211
 msgid "Yes, please"
 msgstr ""
 
-#: includes/Upsell.php:207
+#: includes/Upsell.php:212
 msgid "Uses Multi-step and Form, which come with Modal Kit Pro."
 msgstr ""
 
-#: includes/Upsell.php:209
+#: includes/Upsell.php:214
 msgid "Monthly letter (one step, button links to your signup page)"
 msgstr ""
 
-#: includes/Upsell.php:212
+#: includes/Upsell.php:217
 #: build/admin/wizard.js:2
 msgid "Added-to-cart drawer"
 msgstr ""
 
-#: includes/Upsell.php:214
+#: includes/Upsell.php:219
 msgid "Added to your cart ✓"
 msgstr ""
 
-#: includes/Upsell.php:215
+#: includes/Upsell.php:220
 msgid "Checkout"
 msgstr ""
 
-#: includes/Upsell.php:216
+#: includes/Upsell.php:221
 msgid "Uses WooCommerce blocks and cart triggers, which come with Modal Kit Pro."
 msgstr ""
 
-#: includes/Upsell.php:218
+#: includes/Upsell.php:223
 msgid "Event announcement (a drawer with a link to your cart)"
 msgstr ""
 
-#: includes/Upsell.php:221
+#: includes/Upsell.php:226
 msgid "Countdown bar"
 msgstr ""
 
-#: includes/Upsell.php:223
+#: includes/Upsell.php:228
 msgid "Sale ends in 02:14:33"
 msgstr ""
 
-#: includes/Upsell.php:224
+#: includes/Upsell.php:229
 msgid "Shop now"
 msgstr ""
 
-#: includes/Upsell.php:225
+#: includes/Upsell.php:230
 msgid "Uses the Countdown block, which comes with Modal Kit Pro."
 msgstr ""
 
-#: includes/Upsell.php:227
+#: includes/Upsell.php:232
 msgid "Shipping notice (a bar without the timer)"
 msgstr ""
 
-#: includes/Upsell.php:230
+#: includes/Upsell.php:235
 msgid "Quick view"
 msgstr ""
 
-#: includes/Upsell.php:232
+#: includes/Upsell.php:237
 msgid "Field Notebook, A5"
 msgstr ""
 
-#: includes/Upsell.php:233
+#: includes/Upsell.php:238
 msgid "Add to cart"
 msgstr ""
 
-#: includes/Upsell.php:234
+#: includes/Upsell.php:239
 msgid "Uses WooCommerce product blocks, which come with Modal Kit Pro."
 msgstr ""
 
-#: includes/Upsell.php:236
+#: includes/Upsell.php:241
 msgid "Discount code (a split layout that links to the product)"
 msgstr ""
 
-#: includes/Upsell.php:252
+#: includes/Upsell.php:257
 msgid "Wait for a returning visitor"
 msgstr ""
 
-#: includes/Upsell.php:253
+#: includes/Upsell.php:258
 msgid "Show it from a visitor’s 2nd, 3rd or later visit (session), or only to new visitors, by referrer, cookie or country."
 msgstr ""
 
-#: includes/Upsell.php:260
+#: includes/Upsell.php:265
 msgid "Style editor"
 msgstr ""
 
-#: includes/Upsell.php:261
+#: includes/Upsell.php:266
 msgid "Change a style’s colours, fonts, corners and shadow with a live preview, or start a new style from scratch."
 msgstr ""
 
-#: includes/Upsell.php:277
+#: includes/Upsell.php:282
 msgid "WooCommerce · detected"
 msgstr ""
 
-#: includes/Upsell.php:279
+#: includes/Upsell.php:284
 msgid "Added to cart"
 msgstr ""
 
-#: includes/Upsell.php:280
+#: includes/Upsell.php:285
 msgid "Cart total over…"
 msgstr ""
 
-#: includes/Upsell.php:281
+#: includes/Upsell.php:286
 msgid "Product or category in cart"
 msgstr ""
 
-#: includes/Upsell.php:283
+#: includes/Upsell.php:288
 msgid "Open this modal when the cart passes an amount, e.g. a free-shipping nudge at $30."
 msgstr ""
 
-#: includes/Upsell.php:344
+#: includes/Upsell.php:349
 msgid "Go Pro"
 msgstr ""
 
-#: includes/Upsell.php:367
+#: includes/Upsell.php:372
 msgid "Three modals live. Nice. Pro adds forms, multi-step flows and WooCommerce templates. This is the only time we’ll mention it here."
 msgstr ""
 
-#: includes/Upsell.php:369
+#: includes/Upsell.php:374
 #: build/editor/index.js:8
 msgid "See Pro"
 msgstr ""
