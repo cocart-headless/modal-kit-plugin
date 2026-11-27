@@ -5,8 +5,8 @@
 	<img src="https://img.shields.io/badge/WordPress-6.8+-blue.svg" alt="WordPress 6.8+">
 	<img src="https://img.shields.io/badge/PHP-7.4+-777BB4.svg" alt="PHP 7.4+">
 	<img src="https://img.shields.io/badge/version-1.0.0-brightgreen.svg" alt="Version 1.0.0">
-	<a href="https://github.com/seb86/modal-kit-plugin">
-		<img src="https://img.shields.io/github/stars/seb86/modal-kit-plugin?style=social" alt="GitHub Stars">
+	<a href="https://github.com/cocart-headless/modal-kit-plugin">
+		<img src="https://img.shields.io/github/stars/cocart-headless/modal-kit-plugin?style=social" alt="GitHub Stars">
 	</a>
 </p>
 
@@ -37,7 +37,7 @@ The full feature list is in [readme.txt](readme.txt).
 > [!NOTE]
 > Modal Kit isn't on WordPress.org: you download it from ModalKitWP.com, and it updates from there.
 
-1. Download the zip from [modalkitwp.com](https://modalkitwp.com/) (or [Releases](https://github.com/seb86/modal-kit-plugin/releases)).
+1. Download the zip from [modalkitwp.com](https://modalkitwp.com/) (or [Releases](https://github.com/cocart-headless/modal-kit-plugin/releases)).
 2. In WordPress, go to **Plugins → Add New Plugin → Upload Plugin**, choose the zip, then activate it.
 
 ## Updates

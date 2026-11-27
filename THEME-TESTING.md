@@ -87,7 +87,7 @@ Usually one rule in your theme causes many of the differences, so start with the
 
    Only skip it if the plugin hasn't changed since the last run.
 
-If your theme's rule looks reasonable and Modal Kit still picks it up, that's a bug in Modal Kit. Please [open an issue](https://github.com/seb86/modal-kit-plugin/issues) with the property list from the report, your theme's name and a link to it if it's public.
+If your theme's rule looks reasonable and Modal Kit still picks it up, that's a bug in Modal Kit. Please [open an issue](https://github.com/cocart-headless/modal-kit-plugin/issues) with the property list from the report, your theme's name and a link to it if it's public.
 
 ## What isn't a problem
 
