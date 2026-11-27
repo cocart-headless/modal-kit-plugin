@@ -155,6 +155,11 @@ export function blueprint( pro, plugins = [] ) {
 		features: { networking: true },
 		login: true,
 		steps: [
+			// No theme or plugin file editor in the demo.
+			{
+				step: 'defineWpConfigConsts',
+				consts: { DISALLOW_FILE_EDIT: true },
+			},
 			...( pro
 				? [
 						install( {
