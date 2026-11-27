@@ -138,5 +138,10 @@ Settings → Tools → Reset "already seen" for my browser, or add `?modal=previ
 
 == Changelog ==
 
+= 1.0.1 - 2026-11-27 =
+* Fix: The Soft style keeps its rounded corners on themes that set button corners to 0.
+* Fix: The Soft style keeps the room for the close button and each layout's own spacing.
+* Fix: In the Editorial style, headings, outline buttons and focus rings stay visible on themes that set their own colours for them.
+
 = 1.0.0 - 2026-11-27 =
 * First release.
