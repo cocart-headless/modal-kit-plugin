@@ -803,12 +803,27 @@ dialog.modal-kit:not([open]) {
 		color: inherit;
 	}
 
-	.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color) {
-		color: inherit;
+	// `:not(#mk-id)` weighs as much as an id, so these win over a theme's long
+	// outline-button and focus selectors (Twenty Twenty-One's). A colour set
+	// on the block still wins.
+	&:not(#mk-id) .wp-block-button.is-style-outline > .wp-block-button__link {
+
+		&:not(.has-text-color) {
+			color: inherit;
+		}
+
+		&:not(.has-border-color) {
+			border-color: currentcolor;
+		}
+
+		&:not(.has-background):is(:hover, :focus-visible) {
+			background-color: color-mix(in srgb, currentcolor 15%, transparent);
+		}
 	}
 
-	.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-border-color) {
-		border-color: currentcolor;
+	// A theme's focus ring is drawn for a light page.
+	&:not(#mk-id) :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+		outline-color: currentcolor;
 	}
 }
 
