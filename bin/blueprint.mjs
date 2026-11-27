@@ -97,13 +97,7 @@ const content = ( pro ) => [
 	{
 		step: 'writeFile',
 		path: '/wordpress/wp-content/mu-plugins/modal-kit-demos.php',
-		// The Pro demo names no company, only Modal Kit.
-		data: pro
-			? read( 'bin/demos-mu-plugin.php' ).replace(
-					/ \* Author: .*\n/,
-					''
-				)
-			: read( 'bin/demos-mu-plugin.php' ),
+		data: read( 'bin/demos-mu-plugin.php' ),
 	},
 	{
 		step: 'runPHP',
@@ -158,7 +152,7 @@ export function blueprint( pro, plugins = [] ) {
 		$schema: 'https://playground.wordpress.net/blueprint-schema.json',
 		meta: {
 			title: pro ? 'Modal Kit Pro demo' : 'Modal Kit demo',
-			author: pro ? 'Modal Kit' : 'CoCart Headless, LLC',
+			author: 'CoCart Headless, LLC',
 			description: pro
 				? 'Every Modal Kit starter and Pro feature on a page of its own, opening on its real trigger, with a WooCommerce store for the store starters.'
 				: 'Every free Modal Kit starter on a page of its own, opening on its real trigger, with an index of them all.',

@@ -122,6 +122,12 @@ final class ThemeTokens {
 			$radius = reset( $radius );
 		}
 
+		if ( is_numeric( $radius ) ) {
+			// A bare number, such as "0": the styles do sums with it in
+			// lengths, which a number without a unit breaks.
+			return $radius . 'px';
+		}
+
 		return is_string( $radius ) ? self::to_css( $radius ) : '';
 	}
 

@@ -556,6 +556,20 @@ foreach ( $demos as $demo ) {
 		$rules['showOn']['include'] = array( 'post:' . $page );
 		$triggers                   = isset( $demo['settings']['triggers'] ) ? $demo['settings']['triggers'] : array();
 
+		// Nobody arrives at a demo from a search engine or comes back to it
+		// half an hour later, and a demo is tried on any day at any hour, so
+		// these starter rules would keep the trigger from firing.
+		unset( $rules['schedule']['days'], $rules['schedule']['from'], $rules['schedule']['to'] );
+		if ( isset( $rules['audience']['visitors'] ) && 'returning' === $rules['audience']['visitors'] ) {
+			$rules['audience']['visitors'] = 'all';
+		}
+		if ( isset( $rules['audience']['referrer']['mode'] ) && 'search' === $rules['audience']['referrer']['mode'] ) {
+			$rules['audience']['referrer'] = array(
+				'mode' => 'any',
+				'text' => '',
+			);
+		}
+
 		list( $modal, $edited ) = $upsert(
 			array(
 				'post_type'    => PostType::NAME,
@@ -613,20 +627,8 @@ foreach ( $demos as $demo ) {
 
 		$audience = isset( $rules['audience'] ) ? $rules['audience'] : array();
 
-		if ( isset( $audience['visitors'] ) && 'returning' === $audience['visitors'] ) {
-			$hints[] = 'It only opens on a return visit (after 30 minutes away). Reload the demo makes you a new visitor, so use Open it now to see it.';
-		}
-
 		if ( isset( $audience['visitors'] ) && 'new' === $audience['visitors'] ) {
 			$hints[] = 'It only opens for new visitors: Reload the demo makes you one again.';
-		}
-
-		if ( isset( $audience['referrer']['mode'] ) && 'search' === $audience['referrer']['mode'] ) {
-			$hints[] = 'It only opens when you arrive from a search engine, so use Open it now to see it.';
-		}
-
-		if ( ! empty( $rules['schedule']['days'] ) && count( $rules['schedule']['days'] ) < 7 ) {
-			$hints[] = 'It only opens on the days set in its schedule (site time). On other days, use Open it now.';
 		}
 
 		if ( isset( $rules['shop']['cart'] ) && 'not-empty' === $rules['shop']['cart'] ) {
@@ -860,7 +862,11 @@ foreach ( $style_list as $style_slug => $style_label ) {
 					Patterns::paragraph( 'Join the list for early access to new notebooks, and a code for your first order.' ),
 					Patterns::buttons(
 						array(
-							array( 'text' => 'Claim the code' ),
+							array(
+								'text'   => 'Claim the code',
+								'action' => 'copy',
+								'copy'   => 'NOTEBOOK10',
+							),
 							array(
 								'text'    => 'No thanks',
 								'outline' => true,
