@@ -359,7 +359,8 @@ foreach ( WP_Block_Patterns_Registry::get_instance()->get_all_registered() as $p
 		'slug'        => $short,
 		'title'       => $pattern['title'],
 		'description' => isset( $pattern['description'] ) ? $pattern['description'] : '',
-		'group'       => ( 0 === strpos( $pattern['name'], 'modal-kit-pro/' ) ? 'Pro · ' : 'Free · ' ) . $group,
+		// Free and Pro side by side only when Pro is there too.
+		'group'       => ( $pro ? ( 0 === strpos( $pattern['name'], 'modal-kit-pro/' ) ? 'Pro · ' : 'Free · ' ) : '' ) . $group,
 		'content'     => $pattern['content'],
 		'settings'    => isset( $settings[ $pattern['name'] ] ) ? $settings[ $pattern['name'] ] : ( isset( $conditions[ $pattern['name'] ] ) ? $conditions[ $pattern['name'] ] : array( 'triggers' => $load( 3 ) ) ),
 		'store'       => in_array( $short, $store_starters, true ),
