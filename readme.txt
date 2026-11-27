@@ -14,9 +14,7 @@ Modal Kit adds one block, Modal, and lets you build everything inside it with th
 
 Start from one of the ready-made templates, or from a blank modal, and switch templates later without losing the modal's triggers and display rules.
 
-= Beta =
-
-This is Modal Kit's first public release, labelled beta while it gathers feedback from real sites. Every feature described here is complete and free to use. If something doesn't work as you expect, or you have an idea, please tell us through the support form at https://modalkitwp.com/support/.
+Every feature described here is free to use, with nothing locked or time-limited. If something doesn't work as you expect, or you have an idea, please tell us through the support form at https://modalkitwp.com/support/.
 
 = Nine layouts, one block =
 
@@ -132,7 +130,7 @@ No. Dates, devices, browsers and frequency are checked in the visitor's browser,
 
 = Where do updates come from? =
 
-From modalkitwp.com's package server, not WordPress.org, and they need no license key. Updates show in Dashboard → Updates like any other plugin's. Under Modal Kit → Settings → Updates you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 52 weeks, or roll back to an earlier version. Every update is signed, and Modal Kit refuses one whose signature doesn't check out.
+From modalkitwp.com's package server, not WordPress.org, and they need no license key. Updates show in Dashboard → Updates like any other plugin's. Under Modal Kit → Settings → Updates you can install them automatically, choose a release channel (stable, release candidate, beta or nightly), pause them for up to 12 weeks, or roll back to an earlier version. Every update is signed, and Modal Kit refuses one whose signature doesn't check out.
 
 = How do I test frequency rules? =
 
@@ -140,5 +138,5 @@ Settings → Tools → Reset "already seen" for my browser, or add `?modal=previ
 
 == Changelog ==
 
-= 0.1.0 =
-* First release (beta).
+= 1.0.0 - 2026-11-27 =
+* First release.
