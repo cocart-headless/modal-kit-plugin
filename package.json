@@ -51,7 +51,7 @@
 		"zip": "npm run version && npm run build && npm run i18n:pot && npm run plugin-zip",
 		"screenshots": "node bin/screenshots.cjs",
 		"blueprint": "node bin/blueprint.mjs",
-		"i18n:pot": "node bin/env.mjs wp i18n make-pot . languages/modal-kit.pot --slug=modal-kit --domain=modal-kit --exclude=node_modules,vendor,src,tests,bin,artifacts"
+		"i18n:pot": "node bin/env.mjs wp i18n make-pot . languages/modal-kit.pot --slug=modal-kit --domain=modal-kit --headers={\\\"Report-Msgid-Bugs-To\\\":\\\"https://modalkitwp.com/support/\\\"} --exclude=node_modules,vendor,src,tests,bin,artifacts"
 	},
 	"dependencies": {
 		"@wordpress/a11y": "^5.0.0",
