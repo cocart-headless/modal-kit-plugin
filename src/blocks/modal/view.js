@@ -6,7 +6,12 @@
  * live in runtime/modals.js; rules that gate automatic triggers plug in
  * through addGate().
  */
-import { getContext, getElement, store } from '@wordpress/interactivity';
+import {
+	getContext,
+	getElement,
+	store,
+	withSyncEvent,
+} from '@wordpress/interactivity';
 
 import {
 	addGate,
@@ -56,7 +61,7 @@ const { state } = store( 'modal-kit', {
 			closeModal( getElement().ref.closest( 'dialog' ), 'button' );
 		},
 		// Button actions (ButtonActions.php): close, copy.
-		buttonAction( event ) {
+		buttonAction: withSyncEvent( ( event ) => {
 			const button = getElement().ref;
 			const action = button.dataset.modalKitAction;
 
@@ -85,7 +90,7 @@ const { state } = store( 'modal-kit', {
 					} )
 				);
 			}
-		},
+		} ),
 		toggleAutoClose() {
 			const button = getElement().ref;
 			const paused = toggleAutoClose( button.closest( 'dialog' ) );
@@ -97,15 +102,15 @@ const { state } = store( 'modal-kit', {
 				: ( i18n.pause ?? 'Pause' );
 		},
 		// "Play video" on a click-to-load screen.
-		loadVideo( event ) {
+		loadVideo: withSyncEvent( ( event ) => {
 			event.preventDefault();
 			const button = getElement().ref;
 			loadVideoModule().then( ( video ) =>
 				video.loadFromConsent( button )
 			);
-		},
+		} ),
 		// "Play in video lightbox" links. The link stays a real URL.
-		playVideo( event ) {
+		playVideo: withSyncEvent( ( event ) => {
 			const link = getElement().ref;
 			const lightbox = document.getElementById(
 				`${ state.prefix ?? 'modal-' }video-lightbox`
@@ -138,29 +143,29 @@ const { state } = store( 'modal-kit', {
 					window.location.href = link.dataset.modalKitVideo;
 				}
 			} );
-		},
+		} ),
 		// Enter and Space on a Cover that plays a video.
-		videoKey( event ) {
+		videoKey: withSyncEvent( ( event ) => {
 			if ( event.key === 'Enter' || event.key === ' ' ) {
 				event.preventDefault();
 				getElement().ref.click();
 			}
-		},
+		} ),
 		// Enter and Space on link-styled buttons without an address.
-		buttonKey( event ) {
+		buttonKey: withSyncEvent( ( event ) => {
 			if ( event.key === 'Enter' || event.key === ' ' ) {
 				event.preventDefault();
 				getElement().ref.click();
 			}
-		},
-		onCancel( event ) {
+		} ),
+		onCancel: withSyncEvent( ( event ) => {
 			// Esc. Handle it ourselves so the exit animation plays.
 			event.preventDefault();
 
 			if ( getContext().esc ) {
 				closeModal( getElement().ref, 'esc' );
 			}
-		},
+		} ),
 		onClick( event ) {
 			const dialog = getElement().ref;
 
