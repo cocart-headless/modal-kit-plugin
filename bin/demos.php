@@ -541,6 +541,11 @@ foreach ( $demos as $demo ) {
 		$content
 	);
 
+	// A form prints nothing until it has a destination: demo forms use the
+	// one the demos plugin adds, which accepts the visitor's answers and sends
+	// them nowhere.
+	$content = preg_replace( '/<!-- wp:modal-kit\/form \{(?!"provider")/', '<!-- wp:modal-kit/form {"provider":"demo",', $content );
+
 	// Add-to-cart buttons get the demo products.
 	if ( $product_ids ) {
 		$content = str_replace( '"modalKitAction":"woo-add-to-cart"', '"modalKitAction":"woo-add-to-cart","modalKitProducts":"' . $product_ids[1] . '"', $content );
