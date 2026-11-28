@@ -138,6 +138,9 @@ Settings → Tools → Reset "already seen" for my browser, or add `?modal=previ
 
 == Changelog ==
 
+= 1.0.2 - 2026-11-28 =
+* Fix: Buttons and links in modals call WordPress's `withSyncEvent()` where they stop the browser's default action, as WordPress now asks.
+
 = 1.0.1 - 2026-11-27 =
 * Fix: The Soft style keeps its rounded corners on themes that set button corners to 0.
 * Fix: The Soft style keeps the room for the close button and each layout's own spacing.

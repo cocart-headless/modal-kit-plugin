@@ -2,6 +2,12 @@
 
 All notable changes to Modal Kit. Versions follow [Semantic Versioning](https://semver.org/).
 
+## 1.0.2 - 2026-11-28
+
+### Fixed
+
+- Buttons and links in modals call WordPress's `withSyncEvent()` where they stop the browser's default action, as WordPress now asks.
+
 ## 1.0.1 - 2026-11-27
 
 ### Fixed
